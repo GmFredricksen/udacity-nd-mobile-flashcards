@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+import CustomStatusBar from './components/CustomStatusBar';
+import TabbedNavigation from './components/TabbedNavigation';
+
+// const MainNavigation = createStackNavigator({
+//   Home: {
+//     screen: TabbedNavigation,
+//   },
+// });
 
 class App extends Component<App> {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.ts to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+        <CustomStatusBar backgroundColor={styles.statusBar} barStyle="light-content" />
+        <TabbedNavigation />
       </View>
     );
   }
@@ -16,9 +24,12 @@ class App extends Component<App> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#549c5a',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  statusBar: {
+    backgroundColor: '#549c5a',
   },
 });
 
