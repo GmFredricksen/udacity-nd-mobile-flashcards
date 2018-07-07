@@ -15,6 +15,10 @@ const DecksList: React.SFC<{ navigation }> = ({ navigation }) => (
         key={item.key}
       >
         <Text>{item.title}</Text>
+        <Text>
+          {item.questions.length}
+          {item.questions.length === 1 ? 'Card' : 'Cards'}
+        </Text>
       </TouchableOpacity>
     )}
   />
@@ -24,14 +28,14 @@ const styles = StyleSheet.create({
   listItem: {
     flex: 1,
     height: 80,
-    backgroundColor: '#ddd',
+    backgroundColor: '#c4efc7',
     alignItems: 'center',
     justifyContent: 'center',
   },
   listItemSeparator: {
     height: 1,
     width: "100%",
-    backgroundColor: "#666",
+    backgroundColor: "#9cc19f",
   },
 });
 
