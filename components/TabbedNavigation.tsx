@@ -1,4 +1,6 @@
+import React from 'react';
 import { createBottomTabNavigator } from 'react-navigation';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import DecksStackNavigation from './DecksStackNavigation';
 
@@ -8,6 +10,7 @@ const TabbedNavigation = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: 'Decks',
       title: 'Home',
+      tabBarIcon: <MaterialIcons name='list' size={30}/>
     },
   },
 }, {
