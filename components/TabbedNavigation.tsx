@@ -19,8 +19,6 @@ const TabbedNavigation = createBottomTabNavigator({
     style: {
       height: 55,
       width: '100%',
-      borderColor: '#666',
-      borderWidth: 1,
       backgroundColor: '#549c5a',
       shadowColor: 'rgba(0, 0, 0, 0.24)',
       shadowOffset: {
