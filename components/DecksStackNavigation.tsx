@@ -8,7 +8,7 @@ import DeckDetails from './DeckDetails';
 const DecksStackNavigation = createStackNavigator({
   Home: {
     screen: DecksList,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       title: 'Your Decks',
       headerRight: <Button
         onPress={() => navigation.navigate('AddDeckModal')}
