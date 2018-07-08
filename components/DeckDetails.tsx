@@ -1,27 +1,38 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import seedData from '../utils/seed-data';
 
-interface DeckDetails {
-  navigation: object,
+import { getDeck } from '../utils/api';
+
+interface DeckDetailsProps {
+  navigation: NavigationType,
 }
 
-class DeckDetails extends Component {
-  render() {
+class DeckDetails extends Component<DeckDetailsProps> {
+  state = {
+    deck: {},
+  }
+
+  componentDidMount() {
     const { navigation } = this.props;
     const { deckName } = navigation.state.params;
-    const deckObject = seedData.find((deck) => deck.title === deckName) || null;
+
+    getDeck(deckName)
+      .then((deck) => this.setState({ deck }));
+  }
+
+  render() {
+    const deckObject = this.state.deck || null;
 
     return (
       <View style={styles.detailView}>
-        <Text>You have {deckObject && deckObject.questions.length} questions
-          for {deckName}.
+        <Text>You have {deckObject.questions && deckObject.questions.length} questions
+          for {deckObject.title}.
         </Text>
         <TouchableOpacity>
           <View style={styles.buttonItems}>
             <Text>
-              <MaterialIcons name='add-to-photos' size={30}/>
+              <MaterialIcons name='add-to-photos' size={30} />
               Add Card
             </Text>
           </View>

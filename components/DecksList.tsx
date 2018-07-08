@@ -1,28 +1,52 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux'
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import seedData from '../utils/seed-data';
 
-const DecksList: React.SFC<{ navigation }> = ({ navigation }) => (
-  <FlatList
-    ItemSeparatorComponent={() => (
-      <View style={styles.listItemSeparator} />
-    )}
-    data={seedData}
-    renderItem={({ item }) => (
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Details', { deckName: item.title })}
-        style={styles.listItem}
-        key={item.key}
-      >
-        <Text>{item.title}</Text>
-        <Text>
-          {item.questions.length}
-          {item.questions.length === 1 ? 'Card' : 'Cards'}
-        </Text>
-      </TouchableOpacity>
-    )}
-  />
-)
+import { getDecks } from '../utils/api';
+import { obj2Arr } from '../utils/helpers';
+import { setDecks } from '../actions';
+
+interface DecksListProps {
+  readonly navigation: NavigationType,
+  decks: Array<{}>,
+  dispatch: Dispatch,
+}
+
+class DecksList extends Component<DecksListProps> {
+  componentDidMount() {
+    const { dispatch } = this.props;
+
+    getDecks()
+      .then((decks) => dispatch(setDecks(decks)));
+  }
+
+  render() {
+    const { decks, navigation } = this.props;
+
+    return (
+      <FlatList
+        ItemSeparatorComponent={() => (
+          <View style={styles.listItemSeparator} />
+        )}
+        data={decks}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Details', { deckName: item.title })}
+            style={styles.listItem}
+            key={item.key}
+          >
+            <Text>{item.title}</Text>
+            <Text>
+              {item.questions.length}
+              {item.questions.length === 1 ? 'Card' : 'Cards'}
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   listItem: {
@@ -39,4 +63,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DecksList;
+const mapStateToProps = ({ decks }) => ({
+  decks: obj2Arr(decks),
+});
+
+export default connect(
+  mapStateToProps,
+)(DecksList);
