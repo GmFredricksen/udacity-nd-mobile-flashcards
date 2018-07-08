@@ -6,7 +6,7 @@ export const getDecks = () => {
     .then(JSON.parse);
 }
 
-export const getDeck = (deckId) => {
+export const getDeck = (deckId: string) => {
   return AsyncStorage.getItem(DECKS_STORAGE_KEY)
     .then(JSON.parse)
     .then((decks) => decks[deckId]);

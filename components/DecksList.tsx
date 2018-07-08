@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux'
+import { NavigationScreenProp } from 'react-navigation';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { getDecks } from '../utils/api';
@@ -8,7 +9,7 @@ import { obj2Arr } from '../utils/helpers';
 import { setDecks } from '../actions';
 
 interface DecksListProps {
-  readonly navigation: NavigationType,
+  readonly navigation: NavigationScreenProp<{}>,
   decks: Array<{}>,
   dispatch: Dispatch,
 }

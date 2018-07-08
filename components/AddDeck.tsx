@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { NavigationScreenProp } from 'react-navigation';
+
 import {
   StyleSheet,
   TextInput,
@@ -9,18 +11,17 @@ import {
   Keyboard,
 } from 'react-native';
 
-interface AddDeck {
-  navigation: object,
+interface AddDeckProps {
+  navigation: NavigationScreenProp<{}>,
 }
 
-class AddDeck extends Component {
+class AddDeck extends Component<AddDeckProps> {
   state = {
     titleText: '',
   }
 
   render() {
     const { navigation } = this.props;
-
 
     return (
       <KeyboardAvoidingView style={styles.detailView} behavior="padding" enabled>

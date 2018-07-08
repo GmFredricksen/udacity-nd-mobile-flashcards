@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import { NavigationScreenProp, NavigationParams } from 'react-navigation';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { getDeck } from '../utils/api';
 
 interface DeckDetailsProps {
-  navigation: NavigationType,
+  navigation: NavigationScreenProp<NavigationParams>,
 }
 
 class DeckDetails extends Component<DeckDetailsProps> {

@@ -2,12 +2,12 @@ import { Action } from 'redux';
 
 export const SET_DECKS = 'SET_DECKS';
 
-interface setDecks extends Action {
+export interface DecksInterface extends Action {
   type: string,
-  decks: object,
+  decks?: object,
 }
 
-export function setDecks(decks: object): setDecks {
+export function setDecks(decks: object): DecksInterface {
   return {
     type: SET_DECKS,
     decks,
