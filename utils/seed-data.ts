@@ -1,3 +1,7 @@
+import { AsyncStorage } from 'react-native';
+
+export const DECKS_STORAGE_KEY = 'GmFlashcards:decks'
+
 interface seedData {
   key: string,
   title: string,
@@ -9,8 +13,8 @@ interface seedData {
   ]
 }
 
-const seedData = [
-  {
+export const seedData = {
+  React: {
     key: 'React',
     title: 'React',
     questions: [
@@ -24,7 +28,7 @@ const seedData = [
       }
     ]
   },
-  {
+  JavaScript: {
     key: 'JavaScript',
     title: 'JavaScript',
     questions: [
@@ -34,7 +38,7 @@ const seedData = [
       }
     ]
   },
-  {
+  Rust: {
     key: 'Rust',
     title: 'Rust',
     questions: [
@@ -44,6 +48,10 @@ const seedData = [
       }
     ]
   }
-];
+};
 
-export default seedData;
+export const setSeedData = () => {
+  AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(seedData));
+
+  return seedData;
+}
