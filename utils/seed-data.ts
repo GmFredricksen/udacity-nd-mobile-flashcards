@@ -2,7 +2,7 @@ import { AsyncStorage } from 'react-native';
 
 export const DECKS_STORAGE_KEY = 'GmFlashcards:decks'
 
-interface seedData {
+export interface Deck {
   key: string,
   title: string,
   questions: [

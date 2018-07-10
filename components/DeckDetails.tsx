@@ -4,6 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { getDeck } from '../utils/api';
+import { Deck } from '../utils/seed-data';
 
 interface DeckDetailsProps {
   navigation: NavigationScreenProp<NavigationParams>,
@@ -11,7 +12,7 @@ interface DeckDetailsProps {
 
 class DeckDetails extends Component<DeckDetailsProps> {
   state = {
-    deck: {},
+    deck: {} as Deck,
   }
 
   componentDidMount() {
@@ -23,7 +24,7 @@ class DeckDetails extends Component<DeckDetailsProps> {
   }
 
   render() {
-    const deckObject = this.state.deck || null;
+    const deckObject: Deck = this.state.deck || null;
 
     return (
       <View style={styles.detailView}>

@@ -7,10 +7,11 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import { getDecks } from '../utils/api';
 import { obj2Arr } from '../utils/helpers';
 import { setDecks } from '../actions';
+import { Deck } from '../utils/seed-data';
 
 interface DecksListProps {
   readonly navigation: NavigationScreenProp<{}>,
-  decks: Array<{}>,
+  decks: Array<Deck>,
   dispatch: Dispatch,
 }
 
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ decks }) => ({
+const mapStateToProps = ({ decks }: { decks: Deck}) => ({
   decks: obj2Arr(decks),
 });
 
