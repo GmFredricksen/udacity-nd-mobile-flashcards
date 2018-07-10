@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux'
 import { NavigationScreenProp } from 'react-navigation';
-
 import {
   StyleSheet,
   TextInput,
@@ -11,13 +12,25 @@ import {
   Keyboard,
 } from 'react-native';
 
+import { saveDeckTitle } from '../utils/api';
+
 interface AddDeckProps {
   navigation: NavigationScreenProp<{}>,
+  dispatch: Dispatch,
+}
+interface AddDeckState {
+  titleText: string,
 }
 
-class AddDeck extends Component<AddDeckProps> {
+class AddDeck extends Component<AddDeckProps, AddDeckState> {
   state = {
     titleText: '',
+  }
+
+  handleSaveDeck(navigation: NavigationScreenProp<{}>) {
+    saveDeckTitle(this.state.titleText)
+      .then((data) => console.log(data));
+    navigation.goBack();
   }
 
   render() {
@@ -28,11 +41,11 @@ class AddDeck extends Component<AddDeckProps> {
         <TextInput
           style={styles.titleInputField}
           onBlur={Keyboard.dismiss}
-          onChangeText={(text) => this.setState({ text })}
+          onChangeText={(titleText) => this.setState({ titleText })}
           placeholder="New Deck Title"
           value={this.state.titleText}
         />
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => this.handleSaveDeck(navigation)}>
           <View style={styles.buttonOutlined}>
             <Text>Save Deck</Text>
           </View>

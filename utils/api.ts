@@ -12,10 +12,17 @@ export const getDeck = (deckId: string) => {
     .then((decks) => decks[deckId]);
 }
 
-// export const saveDeckTitle = (deckTitle: String) => {
+export const saveDeckTitle = (deckTitle: string) => {
+  const newDeckToBeSaved = {
+    [deckTitle]: {
+      key: deckTitle,
+      title: deckTitle,
+      questions: [],
+    }
+  };
+  console.log('deckTitle ---', JSON.stringify(newDeckToBeSaved));
 
-// }
-
-// export const addCardToDeck = (deckTitle: String, card: Object) => {
-
-// }
+  return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify(newDeckToBeSaved));
+    // .then(JSON.parse)
+    // .then(data => data);
+}
