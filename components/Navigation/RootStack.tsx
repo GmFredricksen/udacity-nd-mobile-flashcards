@@ -3,8 +3,9 @@ import { StyleSheet, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 import TabbedNavigation from './TabbedNavigation';
-import CustomStatusBar from '../CustomStatusBar';
+// import CustomStatusBar from '../CustomStatusBar';
 import AddDeck from '../AddDeck';
+import AddQuestion from '../AddQuestion';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,6 +32,9 @@ const RootStack = createStackNavigator(
     },
     AddDeckModal: {
       screen: AddDeck,
+    },
+    AddQuestionModal: {
+      screen: AddQuestion,
     },
   },
   {

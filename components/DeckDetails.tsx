@@ -25,13 +25,14 @@ class DeckDetails extends Component<DeckDetailsProps> {
 
   render() {
     const deckObject: Deck = this.state.deck || null;
+    const { navigation } = this.props;
 
     return (
       <View style={styles.detailView}>
         <Text>You have {deckObject.questions && deckObject.questions.length} questions
           for {deckObject.title}.
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('AddQuestionModal')}>
           <View style={styles.buttonItems}>
             <Text>
               <MaterialIcons name='add-to-photos' size={30} />
