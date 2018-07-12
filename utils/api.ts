@@ -20,9 +20,12 @@ export const saveDeckTitle = (deckTitle: string) => {
       questions: [],
     }
   };
-  console.log('deckTitle ---', JSON.stringify(newDeckToBeSaved));
 
-  return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify(newDeckToBeSaved));
-    // .then(JSON.parse)
-    // .then(data => data);
+  return AsyncStorage
+    .mergeItem(DECKS_STORAGE_KEY, JSON.stringify(newDeckToBeSaved))
+    .then(() => {
+      return AsyncStorage.getItem(DECKS_STORAGE_KEY)
+        .then(JSON.parse)
+        .then(decks => decks);
+    });
 }
