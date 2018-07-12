@@ -13,6 +13,9 @@ import {
 } from 'react-native';
 
 import { saveDeckTitle } from '../utils/api';
+import { obj2Arr } from '../utils/helpers';
+import { setDecks } from '../actions';
+import { Deck } from '../utils/seed-data';
 
 interface AddDeckProps {
   navigation: NavigationScreenProp<{}>,
@@ -28,8 +31,10 @@ class AddDeck extends Component<AddDeckProps, AddDeckState> {
   }
 
   handleSaveDeck(navigation: NavigationScreenProp<{}>) {
+    const { dispatch } = this.props;
+
     saveDeckTitle(this.state.titleText)
-      .then((data) => console.log(data));
+      .then((decks) => dispatch(setDecks(decks)));
     navigation.goBack();
   }
 
@@ -82,4 +87,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddDeck;
+const mapStateToProps = ({ decks }: { decks: Deck}) => ({
+  decks: obj2Arr(decks),
+});
+
+export default connect()(AddDeck);
