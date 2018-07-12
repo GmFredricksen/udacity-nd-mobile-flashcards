@@ -3,7 +3,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import reducer from './reducers';
-import RootStack from './components/RootStack';
+import RootStack from './components/Navigation/RootStack';
 import { setSeedData } from './utils/seed-data';
 
 class App extends Component<App> {

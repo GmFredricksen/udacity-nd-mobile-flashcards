@@ -3,8 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 import TabbedNavigation from './TabbedNavigation';
-import CustomStatusBar from './CustomStatusBar';
-import AddDeck from './AddDeck';
+import CustomStatusBar from '../CustomStatusBar';
+import AddDeck from '../AddDeck';
 
 const styles = StyleSheet.create({
   container: {

@@ -2,8 +2,8 @@ import React from 'react';
 import { Button } from 'react-native';
 import { createStackNavigator, NavigationScreenProp, NavigationParams } from 'react-navigation';
 
-import DecksList from './DecksList';
-import DeckDetails from './DeckDetails';
+import DecksList from '../DecksList';
+import DeckDetails from '../DeckDetails';
 
 const DecksStackNavigation = createStackNavigator({
   Home: {
