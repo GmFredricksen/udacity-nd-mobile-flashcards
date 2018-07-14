@@ -33,6 +33,7 @@ class DecksList extends Component<DecksListProps> {
         )}
         data={decks}
         renderItem={({ item }) => (
+          item &&
           <TouchableOpacity
             onPress={() => navigation.navigate('Details', { deckName: item.title })}
             style={styles.listItem}
