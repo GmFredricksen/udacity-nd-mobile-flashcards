@@ -1,7 +1,9 @@
 import { Action, combineReducers } from 'redux';
 
 import {
-  SET_DECKS, DecksInterface,
+  DecksInterface,
+  SET_DECKS,
+  SET_DECK,
 } from '../actions';
 
 function decks(state = {}, action: DecksInterface): object {
@@ -10,6 +12,13 @@ function decks(state = {}, action: DecksInterface): object {
       return {
         ...state,
         ...action.decks,
+      }
+    case SET_DECK:
+      const { deck } = action;
+
+      return {
+        ...state,
+        [deck.key]: deck,
       }
     default:
       return state;
