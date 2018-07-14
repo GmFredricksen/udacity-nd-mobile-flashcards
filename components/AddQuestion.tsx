@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Dispatch } from 'redux';
-import { connect } from 'react-redux'
 import { NavigationScreenProp } from 'react-navigation';
 import {
   StyleSheet,
@@ -12,32 +11,34 @@ import {
   Keyboard,
 } from 'react-native';
 
-import { saveDeckTitle } from '../utils/api';
-import { obj2Arr } from '../utils/helpers';
-import { setDecks } from '../actions';
-import { Deck } from '../utils/seed-data';
+import { addCardToDeck } from '../utils/api';
+import { setDeck } from '../actions';
 
 interface AddQuestionProps {
   navigation: NavigationScreenProp<{}>,
   dispatch: Dispatch,
 }
 interface AddQuestionState {
-  questionText: string,
-  answerText: string,
+  question: string,
+  answer: string,
 }
 
 class AddQuestion extends Component<AddQuestionProps, AddQuestionState> {
   state = {
-    questionText: '',
-    answerText: '',
+    question: '',
+    answer: '',
   }
 
-  handleSaveQuestion(navigation: NavigationScreenProp<{}>) {
-    // const { dispatch } = this.props;
+  handleSaveQuestion() {
+    const { dispatch, navigation } = this.props;
+    const { deckName } = navigation.state.params;
 
-    // saveDeckTitle(this.state.titleText)
-    //   .then((decks) => dispatch(setDecks(decks)));
-    navigation.goBack();
+    addCardToDeck(deckName, this.state)
+      .then((deck) => {
+        console.log('cardadded -- ', deck);
+        // dispatch(setDeck(deck));
+        navigation.goBack();
+      });
   }
 
   render() {
@@ -48,18 +49,18 @@ class AddQuestion extends Component<AddQuestionProps, AddQuestionState> {
         <TextInput
           style={styles.titleInputField}
           onBlur={Keyboard.dismiss}
-          onChangeText={(questionText) => this.setState({ questionText })}
+          onChangeText={(question) => this.setState({ question })}
           placeholder="Question"
-          value={this.state.questionText}
+          value={this.state.question}
         />
         <TextInput
           style={styles.titleInputField}
           onBlur={Keyboard.dismiss}
-          onChangeText={(answerText) => this.setState({ answerText })}
+          onChangeText={(answer) => this.setState({ answer })}
           placeholder="Answer"
-          value={this.state.answerText}
+          value={this.state.answer}
         />
-        <TouchableOpacity onPress={() => this.handleSaveQuestion(navigation)}>
+        <TouchableOpacity onPress={() => this.handleSaveQuestion()}>
           <View style={styles.buttonOutlined}>
             <Text>Save Card</Text>
           </View>
@@ -96,8 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// const mapStateToProps = ({ decks }: { decks: Deck}) => ({
-//   decks: obj2Arr(decks),
-// });
-
-export default connect()(AddQuestion);
+export default AddQuestion;
