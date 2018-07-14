@@ -1,38 +1,42 @@
 import React, { Component } from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import { NavigationScreenProp, NavigationParams } from 'react-navigation';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { getDeck } from '../utils/api';
+import { obj2Arr } from '../utils/helpers';
 import { Deck } from '../utils/seed-data';
+import { setDeck } from '../actions';
 
 interface DeckDetailsProps {
+  deck: Deck,
+  dispatch: Dispatch,
   navigation: NavigationScreenProp<NavigationParams>,
 }
 
 class DeckDetails extends Component<DeckDetailsProps> {
-  state = {
-    deck: {} as Deck,
-  }
-
   componentDidMount() {
-    const { navigation } = this.props;
+    const { dispatch, navigation } = this.props;
     const { deckName } = navigation.state.params;
 
     getDeck(deckName)
-      .then((deck) => this.setState({ deck }));
+      .then((deck) => dispatch(setDeck(deck)));
   }
 
   render() {
-    const deckObject: Deck = this.state.deck || null;
-    const { navigation } = this.props;
+    const { deck, navigation } = this.props;
 
     return (
+      
+      deck &&
+
       <View style={styles.detailView}>
-        <Text>You have {deckObject.questions && deckObject.questions.length} questions
-          for {deckObject.title}.
+        <Text>You have {(deck && deck.questions) && deck.questions.length} questions
+          for {deck.title}.
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('AddQuestionModal')}>
+        <TouchableOpacity onPress={() => navigation.navigate('AddQuestionModal', { deckName: deck.title })}>
           <View style={styles.buttonItems}>
             <Text>
               <MaterialIcons name='add-to-photos' size={30} />
@@ -74,4 +78,14 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DeckDetails;
+const mapStateToProps = ({ decks }: { decks: Deck[]}, ownProps: DeckDetailsProps) => {
+  const { deckName } = ownProps.navigation.state.params;
+
+  return {
+    deck: decks[deckName],
+  }
+};
+
+export default connect(
+  mapStateToProps,
+)(DeckDetails);
