@@ -29,3 +29,22 @@ export const saveDeckTitle = (deckTitle: string) => {
         .then(decks => decks);
     });
 }
+
+export const addCardToDeck = (deckTitle: string, cardObject: object) => {
+  return getDeck(deckTitle)
+    .then((selectedDeck) => {    
+      const deckToBeUpdated = {
+        [selectedDeck.key]: {
+          ...selectedDeck,
+          questions: [
+            ...selectedDeck.questions,
+            cardObject,
+          ],
+        }
+      };
+
+      return AsyncStorage
+        .mergeItem(DECKS_STORAGE_KEY, JSON.stringify(deckToBeUpdated))
+        .then(() => deckToBeUpdated);
+    });
+}
