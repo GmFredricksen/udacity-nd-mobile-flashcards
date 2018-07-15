@@ -4,6 +4,7 @@ import { createStackNavigator, NavigationScreenProp, NavigationParams } from 're
 
 import DecksList from '../DecksList';
 import DeckDetails from '../DeckDetails';
+import Quiz from '../Quiz';
 
 const DecksStackNavigation = createStackNavigator({
   Home: {
@@ -20,6 +21,12 @@ const DecksStackNavigation = createStackNavigator({
     screen: DeckDetails,
     navigationOptions: ({ navigation }: {navigation: NavigationScreenProp<NavigationParams>}) => ({
       title: `${navigation.state.params.deckName}`,
+    }),
+  },
+  QuizView: {
+    screen: Quiz,
+    navigationOptions: ({ navigation }: {navigation: NavigationScreenProp<NavigationParams>}) => ({
+      title: `Quiz - ${navigation.state.params.deckName}`,
     }),
   },
 });
