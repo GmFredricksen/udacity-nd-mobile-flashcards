@@ -11,7 +11,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { getDeck } from '../utils/api';
-import { obj2Arr } from '../utils/helpers';
 import { Deck } from '../utils/seed-data';
 import { setDeck } from '../actions';
 
