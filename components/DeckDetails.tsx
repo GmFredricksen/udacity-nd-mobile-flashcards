@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { NavigationScreenProp, NavigationParams } from 'react-navigation';
+import {
+  NavigationEventSubscription,
+  NavigationEventPayload,
+  NavigationScreenProp,
+  NavigationParams,
+} from 'react-navigation';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -17,9 +22,24 @@ interface DeckDetailsProps {
 }
 
 class DeckDetails extends Component<DeckDetailsProps> {
-  componentDidMount() {
-    const { dispatch, navigation } = this.props;
-    const { deckName } = navigation.state.params;
+  willFocusListener: NavigationEventSubscription;
+
+  constructor(props: DeckDetailsProps) {
+    super(props);
+
+    this.willFocusListener = props.navigation.addListener(
+      'willFocus',
+      (payload) => this._componentWillFocus(payload),
+    );
+  }
+
+  componentWillUnmount() {
+    this.willFocusListener.remove();
+  }
+
+  _componentWillFocus = (_payload: NavigationEventPayload) => {
+    const { dispatch } = this.props;
+    const { deckName } = _payload.state.params;
 
     getDeck(deckName)
       .then((deck) => dispatch(setDeck(deck)));
@@ -29,7 +49,7 @@ class DeckDetails extends Component<DeckDetailsProps> {
     const { deck, navigation } = this.props;
 
     return (
-      
+
       deck &&
 
       <View style={styles.detailView}>
@@ -78,7 +98,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ decks }: { decks: Deck[]}, ownProps: DeckDetailsProps) => {
+const mapStateToProps = ({ decks }: { decks: Deck[] }, ownProps: DeckDetailsProps) => {
   const { deckName } = ownProps.navigation.state.params;
 
   return {
