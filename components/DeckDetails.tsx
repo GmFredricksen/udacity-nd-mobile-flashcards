@@ -63,7 +63,7 @@ class DeckDetails extends Component<DeckDetailsProps> {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('QuizView', { deckName: deck.title })}>
           <View style={styles.buttonOutlined}>
             <Text>Start Quiz</Text>
           </View>
