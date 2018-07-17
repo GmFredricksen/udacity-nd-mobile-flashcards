@@ -3,8 +3,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
+  NavigationActions,
   NavigationScreenProp,
   NavigationParams,
+  StackActions,
 } from 'react-navigation';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
@@ -57,11 +59,31 @@ class Quiz extends Component<QuizProps> {
     <Text>{this.state.activeSlide + 1} / {this.props.deck.questions.length}</Text>
   )
 
+  goToNextStep = () => {
+    const { deck } = this.props;
+    const { activeSlide } = this.state;
+    const currentSelectedCard = activeSlide + 1;
+
+    (currentSelectedCard < deck.questions.length)
+      ? this.carouselInstance.snapToNext()
+      : this.goToQuizResultAndAdjustStack();
+  }
+  goToQuizResultAndAdjustStack = () => {
+    const { navigation } = this.props;
+    const currentNavigationKey = navigation.state.key;
+
+    const replaceAction = StackActions.replace({
+      key: currentNavigationKey,
+      action: NavigationActions.navigate({ routeName: 'QuizResult' }),
+      routeName: 'QuizResult',
+    });
+    navigation.dispatch(replaceAction);
+  }
   setCorrectAnswer = () => {
-    this.carouselInstance.snapToNext();
+    this.goToNextStep();
   }
   setIncorrectAnswer = () => {
-    this.carouselInstance.snapToNext();
+    this.goToNextStep();
   }
 
   render() {
@@ -80,15 +102,15 @@ class Quiz extends Component<QuizProps> {
           itemWidth={width - 10}
           scrollEnabled={false}
         />
-          {/* {this.pagination} */}
+        {/* {this.pagination} */}
         <TouchableOpacity onPress={() => this.setCorrectAnswer()}>
           <View style={styles.buttonCorrect}>
-            <Text style={{color: 'white'}}>Correct</Text>
+            <Text style={{ color: 'white' }}>Correct</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.setIncorrectAnswer()}>
           <View style={styles.buttonIncorrect}>
-            <Text style={{color: 'white'}}>Incorrect</Text>
+            <Text style={{ color: 'white' }}>Incorrect</Text>
           </View>
         </TouchableOpacity>
       </View>
