@@ -10,6 +10,7 @@ export interface Deck {
     {
       question: string,
       answer: string,
+      result: boolean,
     }
   ]
 }
@@ -21,11 +22,13 @@ export const seedData = {
     questions: [
       {
         question: 'What is React?',
-        answer: 'A library for managing user interfaces'
+        answer: 'A library for managing user interfaces',
+        result: true
       },
       {
         question: 'Where do you make Ajax requests in React?',
-        answer: 'The componentDidMount lifecycle event'
+        answer: 'The componentDidMount lifecycle event',
+        result: true
       }
     ]
   },
@@ -35,7 +38,8 @@ export const seedData = {
     questions: [
       {
         question: 'What is a closure?',
-        answer: 'The combination of a function and the lexical environment within which that function was declared.'
+        answer: 'The combination of a function and the lexical environment within which that function was declared.',
+        result: true
       }
     ]
   },
@@ -45,7 +49,8 @@ export const seedData = {
     questions: [
       {
         question: 'What is a closure?',
-        answer: 'The combination of a function and the lexical environment within which that function was declared.'
+        answer: 'The combination of a function and the lexical environment within which that function was declared.',
+        result: true
       }
     ]
   }
