@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     padding: 20,
-    borderWidth: 1,
   },
 });
 
