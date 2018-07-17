@@ -32,7 +32,7 @@ export const saveDeckTitle = (deckTitle: string) => {
 
 export const addCardToDeck = (deckTitle: string, cardObject: object) => {
   return getDeck(deckTitle)
-    .then((selectedDeck) => {    
+    .then((selectedDeck) => {
       const deckToBeUpdated = {
         [selectedDeck.key]: {
           ...selectedDeck,

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Dispatch } from 'redux';
 import { NavigationScreenProp } from 'react-navigation';
 import {
   StyleSheet,
@@ -12,11 +11,9 @@ import {
 } from 'react-native';
 
 import { addCardToDeck } from '../utils/api';
-import { setDeck } from '../actions';
 
 interface AddQuestionProps {
   navigation: NavigationScreenProp<{}>,
-  dispatch: Dispatch,
 }
 interface AddQuestionState {
   question: string,
@@ -30,13 +27,11 @@ class AddQuestion extends Component<AddQuestionProps, AddQuestionState> {
   }
 
   handleSaveQuestion() {
-    const { dispatch, navigation } = this.props;
+    const { navigation } = this.props;
     const { deckName } = navigation.state.params;
 
     addCardToDeck(deckName, this.state)
-      .then((deck) => {
-        console.log('cardadded -- ', deck);
-        // dispatch(setDeck(deck));
+      .then(() => {
         navigation.goBack();
       });
   }
