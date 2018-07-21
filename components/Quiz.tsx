@@ -40,11 +40,13 @@ class Quiz extends Component<QuizProps> {
   goToQuizResultAndAdjustStack = () => {
     const { navigation } = this.props;
     const currentNavigationKey = navigation.state.key;
+    const { deckName } = navigation.state.params;
 
     const replaceAction = StackActions.replace({
       key: currentNavigationKey,
       action: NavigationActions.navigate({ routeName: 'QuizResult' }),
       routeName: 'QuizResult',
+      params: { deckName },
     });
     navigation.dispatch(replaceAction);
   }
