@@ -51,3 +51,11 @@ export const seedData = {
     ]
   }
 };
+
+export const currentQuiz = {
+  deckTitle: '',
+  totalQuestions: 0,
+  correctAnswers: 0,
+  wrongAnswers: 0,
+  dateWhenPlayed: Date(),
+};

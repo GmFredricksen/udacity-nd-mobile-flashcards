@@ -1,8 +1,12 @@
 import { AsyncStorage } from 'react-native';
-import { seedData } from './seed-data';
+import { currentQuiz, seedData } from './seed-data';
 
 export const DECKS_STORAGE_KEY = 'GmFlashcards:decks';
+export const CURRENT_QUIZ_STORAGE_KEY = 'GmFlashcards:currentQuiz';
 
+/**
+ * Decks storage methods
+ */
 export const setSeedData = () => {
   AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(seedData));
 
@@ -55,4 +59,14 @@ export const addCardToDeck = (deckTitle: string, cardObject: object) => {
         .mergeItem(DECKS_STORAGE_KEY, JSON.stringify(deckToBeUpdated))
         .then(() => deckToBeUpdated);
     });
+}
+
+/**
+ * Current Quiz storage methods
+ */
+
+export const setCurrentQuizData = () => {
+  AsyncStorage.setItem(CURRENT_QUIZ_STORAGE_KEY, JSON.stringify(currentQuiz));
+
+  return currentQuiz;
 }
