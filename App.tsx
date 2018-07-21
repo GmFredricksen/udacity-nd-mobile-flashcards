@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 
 import reducer from './reducers';
 import RootStack from './components/Navigation/RootStack';
-import { setSeedData } from './utils/seed-data';
+import { setSeedData } from './utils/api';
 
 class App extends Component<App> {
   componentDidMount() {

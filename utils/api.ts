@@ -1,5 +1,13 @@
 import { AsyncStorage } from 'react-native';
-import { DECKS_STORAGE_KEY } from './seed-data';
+import { seedData } from './seed-data';
+
+export const DECKS_STORAGE_KEY = 'GmFlashcards:decks';
+
+export const setSeedData = () => {
+  AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(seedData));
+
+  return seedData;
+}
 
 export const getDecks = () => {
   return AsyncStorage.getItem(DECKS_STORAGE_KEY)
