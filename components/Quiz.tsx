@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
@@ -8,14 +7,13 @@ import {
   NavigationParams,
   StackActions,
 } from 'react-navigation';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Carousel from 'react-native-snap-carousel';
 
 import Card from './Card';
 import { Deck } from '../utils/seed-data';
 
 interface QuizProps {
   deck: Deck,
-  // dispatch: Dispatch,
   navigation: NavigationScreenProp<NavigationParams>,
 }
 
@@ -24,35 +22,6 @@ class Quiz extends Component<QuizProps> {
 
   state = {
     activeSlide: 0,
-  }
-
-  componentDidMount() {
-
-  }
-
-  get pagination() {
-    const { activeSlide } = this.state;
-    const { deck } = this.props;
-
-    return (
-      <Pagination
-        dotsLength={deck.questions.length}
-        activeDotIndex={activeSlide}
-        // containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
-        dotStyle={{
-          width: 10,
-          height: 10,
-          borderRadius: 5,
-          marginHorizontal: 8,
-          backgroundColor: 'rgba(255, 255, 255, 0.92)'
-        }}
-        inactiveDotStyle={{
-          // Define styles for inactive dots here
-        }}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
-      />
-    );
   }
 
   cardCounterComponent = () => (
@@ -102,7 +71,6 @@ class Quiz extends Component<QuizProps> {
           itemWidth={width - 10}
           scrollEnabled={false}
         />
-        {/* {this.pagination} */}
         <TouchableOpacity onPress={() => this.setCorrectAnswer()}>
           <View style={styles.buttonCorrect}>
             <Text style={{ color: 'white' }}>Correct</Text>
