@@ -63,11 +63,19 @@ class DeckDetails extends Component<DeckDetailsProps> {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('QuizView', { deckName: deck.title })}>
-          <View style={styles.buttonOutlined}>
-            <Text>Start Quiz</Text>
-          </View>
-        </TouchableOpacity>
+
+        { deck.questions.length
+          ? <TouchableOpacity onPress={() => navigation.navigate('QuizView', { deckName: deck.title })}>
+              <View style={styles.buttonOutlined}>
+                <Text>Start Quiz</Text>
+              </View>
+            </TouchableOpacity>
+          : <View>
+              <Text>
+                🤔 Mmh... Add at least 1 Card to be able to start a Quiz.
+              </Text>
+            </View>
+        }
       </View>
     )
   }
