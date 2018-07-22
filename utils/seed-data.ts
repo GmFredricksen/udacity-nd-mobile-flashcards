@@ -1,5 +1,5 @@
 export interface Deck {
-  [key:string]: Object,
+  [key: string]: Object,
   key: string,
   title: string,
   questions: [
@@ -9,6 +9,14 @@ export interface Deck {
       result: boolean,
     }
   ]
+}
+
+export interface CurrentQuiz {
+  deckTitle: string;
+  totalQuestions: number;
+  correctAnswers: number;
+  wrongAnswers: number;
+  dateWhenPlayed: string;
 }
 
 export const seedData = {
@@ -52,7 +60,7 @@ export const seedData = {
   }
 };
 
-export const currentQuiz = {
+export const currentQuiz: CurrentQuiz = {
   deckTitle: '',
   totalQuestions: 0,
   correctAnswers: 0,
