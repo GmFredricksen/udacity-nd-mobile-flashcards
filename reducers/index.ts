@@ -1,7 +1,9 @@
-import { Action, combineReducers } from 'redux';
+import { combineReducers } from 'redux';
 
 import {
   DecksInterface,
+  CurrentQuizActionInterface,
+  SET_CURRENT_QUIZ,
   SET_DECKS,
   SET_DECK,
 } from '../actions';
@@ -25,4 +27,21 @@ function decks(state = {}, action: DecksInterface): object {
   }
 }
 
-export default combineReducers({ decks });
+function currentQuiz(state = {}, action: CurrentQuizActionInterface): object {
+  switch (action.type) {
+    case SET_CURRENT_QUIZ:
+      const { quiz } = action;
+
+      return {
+        ...state,
+        ...quiz,
+      }
+    default:
+      return state;
+  }
+}
+
+export default combineReducers({
+  currentQuiz,
+  decks,
+});
