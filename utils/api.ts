@@ -42,7 +42,7 @@ export const saveDeckTitle = (deckTitle: string) => {
     });
 }
 
-export const addCardToDeck = (deckTitle: string, cardObject: Deck) => {
+export const addCardToDeck = (deckTitle: string, cardObject: object) => {
   return getDeck(deckTitle)
     .then((selectedDeck) => {
       const deckToBeUpdated = {
@@ -64,7 +64,6 @@ export const addCardToDeck = (deckTitle: string, cardObject: Deck) => {
 /**
  * Current Quiz storage methods
  */
-
 export const initCurrentQuizData = (deck: Deck) => {
   const currentQuizToBeSaved = {
     ...currentQuizSeedData,
