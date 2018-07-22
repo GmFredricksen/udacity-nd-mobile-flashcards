@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   NavigationActions,
@@ -7,7 +8,10 @@ import {
   StackActions,
 } from 'react-navigation';
 
+import { CurrentQuiz } from '../utils/seed-data';
+
 interface QuizResultProps {
+  currentQuiz: CurrentQuiz,
   navigation: NavigationScreenProp<NavigationParams>,
 }
 
@@ -27,9 +31,15 @@ class QuizResult extends Component<QuizResultProps> {
   }
 
   render() {
+    const { currentQuiz, navigation } = this.props;
+    const { deckName } = navigation.state.params;
+    const { correctAnswers, totalQuestions } = currentQuiz;
+
     return (
       <View style={styles.quizResult}>
-        <Text>RESULT</Text>
+        <Text>Results for {deckName} Quiz</Text>
+        <Text>You've successfully answered</Text>
+        <Text>{correctAnswers} out of {totalQuestions} questions</Text>
         <TouchableOpacity onPress={() => this.restartQuizAndAdjustStack()}>
           <View style={styles.buttonOutlined}>
             <Text>Restart Quiz</Text>
@@ -56,4 +66,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuizResult;
+const mapStateToProps = ({ currentQuiz }: { currentQuiz: CurrentQuiz }) => ({
+  currentQuiz,
+})
+
+export default connect(
+  mapStateToProps,
+)(QuizResult);
