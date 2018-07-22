@@ -1,11 +1,12 @@
 {
   "name": "gm-flashcards",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "devDependencies": {
     "@types/jest": "^22.2.3",
     "@types/react": "^16.3.14",
     "@types/react-native": "^0.55.14",
+    "@types/react-redux": "^6.0.3",
     "@types/react-test-renderer": "^16.0.1",
     "jest-expo": "~27.0.0",
     "react-native-scripts-ts": "1.15.0",
@@ -49,8 +50,16 @@
     }
   },
   "dependencies": {
+    "@types/expo": "^27.0.5",
+    "@types/expo__vector-icons": "^6.2.2",
+    "@types/react-native-snap-carousel": "^3.6.3",
+    "@types/react-navigation": "^2.0.9",
     "expo": "^27.0.1",
     "react": "16.3.1",
-    "react-native": "~0.55.2"
+    "react-native": "~0.55.2",
+    "react-native-snap-carousel": "^3.7.2",
+    "react-navigation": "^2.5.5",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0"
   }
 }

@@ -2,5 +2,5 @@
   "extends": ["tslint:latest", "tslint-react"],
   "rules": {
     "quotemark": [true, "single"],
-  }
+  },
 }
