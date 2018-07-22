@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native';
-import { currentQuiz, seedData } from './seed-data';
+import { currentQuizSeedData, decksSeedData, CurrentQuiz, Deck } from './seed-data';
 
 export const DECKS_STORAGE_KEY = 'GmFlashcards:decks';
 export const CURRENT_QUIZ_STORAGE_KEY = 'GmFlashcards:currentQuiz';
@@ -8,9 +8,9 @@ export const CURRENT_QUIZ_STORAGE_KEY = 'GmFlashcards:currentQuiz';
  * Decks storage methods
  */
 export const setSeedData = () => {
-  AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(seedData));
+  AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(decksSeedData));
 
-  return seedData;
+  return decksSeedData;
 }
 
 export const getDecks = () => {
@@ -42,7 +42,7 @@ export const saveDeckTitle = (deckTitle: string) => {
     });
 }
 
-export const addCardToDeck = (deckTitle: string, cardObject: object) => {
+export const addCardToDeck = (deckTitle: string, cardObject: Deck) => {
   return getDeck(deckTitle)
     .then((selectedDeck) => {
       const deckToBeUpdated = {
@@ -65,8 +65,24 @@ export const addCardToDeck = (deckTitle: string, cardObject: object) => {
  * Current Quiz storage methods
  */
 
-export const setCurrentQuizData = () => {
-  AsyncStorage.setItem(CURRENT_QUIZ_STORAGE_KEY, JSON.stringify(currentQuiz));
+export const initCurrentQuizData = (deck: Deck) => {
+  const currentQuizToBeSaved = {
+    ...currentQuizSeedData,
+    deckTitle: deck.title,
+    totalQuestions: deck.questions.length,
+  }
 
-  return currentQuiz;
+  return AsyncStorage.setItem(CURRENT_QUIZ_STORAGE_KEY, JSON.stringify(currentQuizToBeSaved))
+    .then(() => AsyncStorage.getItem(CURRENT_QUIZ_STORAGE_KEY)
+      .then(JSON.parse));
+}
+export const setCurrentQuizData = (currentQuiz: CurrentQuiz) => {
+  const currentQuizToBeSaved = {
+    ...currentQuiz,
+    dateWhenPlayed: Date(),
+  }
+
+  return AsyncStorage.setItem(CURRENT_QUIZ_STORAGE_KEY, JSON.stringify(currentQuizToBeSaved))
+    .then(() => AsyncStorage.getItem(CURRENT_QUIZ_STORAGE_KEY)
+      .then(JSON.parse));
 }

@@ -12,14 +12,14 @@ export interface Deck {
 }
 
 export interface CurrentQuiz {
-  deckTitle: string;
-  totalQuestions: number;
-  correctAnswers: number;
-  wrongAnswers: number;
-  dateWhenPlayed: string;
+  deckTitle: string,
+  totalQuestions: number,
+  correctAnswers: number,
+  wrongAnswers: number,
+  dateWhenPlayed: string,
 }
 
-export const seedData = {
+export const decksSeedData = {
   React: {
     key: 'React',
     title: 'React',
@@ -60,7 +60,7 @@ export const seedData = {
   }
 };
 
-export const currentQuiz: CurrentQuiz = {
+export const currentQuizSeedData: CurrentQuiz = {
   deckTitle: '',
   totalQuestions: 0,
   correctAnswers: 0,
