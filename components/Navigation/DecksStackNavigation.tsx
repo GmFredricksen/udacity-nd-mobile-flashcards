@@ -14,7 +14,7 @@ const DecksStackNavigation = createStackNavigator({
       title: 'Your Decks',
       headerRight: <Button
         onPress={() => navigation.navigate('AddDeckModal')}
-        title='+'
+        title='Add Deck'
       />,
     }),
   },
