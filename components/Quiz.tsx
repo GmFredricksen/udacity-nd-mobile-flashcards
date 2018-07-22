@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
@@ -10,23 +11,78 @@ import {
 import Carousel from 'react-native-snap-carousel';
 
 import Card from './Card';
-import { Deck } from '../utils/seed-data';
+import { initCurrentQuizData, setCurrentQuizData } from '../utils/api';
+import { setCurrentQuiz } from '../actions';
+import { CurrentQuiz, Deck } from '../utils/seed-data';
 
 interface QuizProps {
+  currentQuiz: CurrentQuiz,
   deck: Deck,
+  dispatch: Dispatch,
   navigation: NavigationScreenProp<NavigationParams>,
 }
+interface QuizState {
+  activeSlide: number,
+  currentQuiz: CurrentQuiz,
+}
 
-class Quiz extends Component<QuizProps> {
+class Quiz extends Component<QuizProps, QuizState> {
   carouselInstance: Carousel;
 
   state = {
     activeSlide: 0,
+    currentQuiz: {
+      deckTitle: '',
+      totalQuestions: 0,
+      correctAnswers: 0,
+      wrongAnswers: 0,
+      dateWhenPlayed: '',
+    },
+  }
+
+  componentDidMount() {
+    const { deck, dispatch } = this.props;
+
+    initCurrentQuizData(deck)
+      .then((currentQuiz) => {
+        dispatch(setCurrentQuiz(currentQuiz));
+        this.setState({ currentQuiz });
+      });
   }
 
   cardCounterComponent = () => (
     <Text>{this.state.activeSlide + 1} / {this.props.deck.questions.length}</Text>
   )
+
+  isAnswerOnCardCorrect = (doesUserThinkIsCorrect: boolean) => {
+    const { deck } = this.props;
+    let propToUpdate = '';
+    let countToUpdate: number;
+    
+    this.setState((prevState) => {
+      const { activeSlide, currentQuiz } = prevState;
+      const { correctAnswers, wrongAnswers } = currentQuiz;
+      const isUserAnswerCorrect = deck.questions[activeSlide].result === doesUserThinkIsCorrect;
+
+      if (isUserAnswerCorrect) {
+        propToUpdate = 'correctAnswers';
+        countToUpdate = correctAnswers + 1;
+      } else {
+        propToUpdate = 'wrongAnswers';
+        countToUpdate = wrongAnswers + 1;
+      }
+
+      return {
+        ...prevState,
+        currentQuiz: {
+          ...currentQuiz,
+          [propToUpdate]: countToUpdate,
+        }
+      }
+    }, () => {
+      this.goToNextStep();
+    });
+  }
 
   goToNextStep = () => {
     const { deck } = this.props;
@@ -35,8 +91,20 @@ class Quiz extends Component<QuizProps> {
 
     (currentSelectedCard < deck.questions.length)
       ? this.carouselInstance.snapToNext()
-      : this.goToQuizResultAndAdjustStack();
+      : this.updateCurrentQuiz();
   }
+
+  updateCurrentQuiz = () => {
+    const { dispatch } = this.props;
+    const { currentQuiz } = this.state;
+
+    setCurrentQuizData(currentQuiz)
+      .then((currentQuiz) => {
+        dispatch(setCurrentQuiz(currentQuiz));
+        this.goToQuizResultAndAdjustStack();
+      });
+  }
+
   goToQuizResultAndAdjustStack = () => {
     const { navigation } = this.props;
     const currentNavigationKey = navigation.state.key;
@@ -49,12 +117,6 @@ class Quiz extends Component<QuizProps> {
       params: { deckName },
     });
     navigation.dispatch(replaceAction);
-  }
-  setCorrectAnswer = () => {
-    this.goToNextStep();
-  }
-  setIncorrectAnswer = () => {
-    this.goToNextStep();
   }
 
   render() {
@@ -73,12 +135,12 @@ class Quiz extends Component<QuizProps> {
           itemWidth={width - 10}
           scrollEnabled={false}
         />
-        <TouchableOpacity onPress={() => this.setCorrectAnswer()}>
+        <TouchableOpacity onPress={() => this.isAnswerOnCardCorrect(true)}>
           <View style={styles.buttonCorrect}>
             <Text style={{ color: 'white' }}>Correct</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.setIncorrectAnswer()}>
+        <TouchableOpacity onPress={() => this.isAnswerOnCardCorrect(false)}>
           <View style={styles.buttonIncorrect}>
             <Text style={{ color: 'white' }}>Incorrect</Text>
           </View>
@@ -111,10 +173,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ decks }: { decks: Deck[] }, ownProps: QuizProps) => {
+const mapStateToProps = ({ currentQuiz, decks }: { currentQuiz: CurrentQuiz, decks: Deck[] }, ownProps: QuizProps) => {
   const { deckName } = ownProps.navigation.state.params;
 
   return {
+    currentQuiz,
     deck: decks[deckName],
   }
 };
