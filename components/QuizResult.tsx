@@ -9,6 +9,7 @@ import {
 } from 'react-navigation';
 
 import { CurrentQuiz } from '../utils/seed-data';
+import { clearLocalNotification, setLocalNotification } from '../utils/api';
 
 interface QuizResultProps {
   currentQuiz: CurrentQuiz,
@@ -16,6 +17,11 @@ interface QuizResultProps {
 }
 
 class QuizResult extends Component<QuizResultProps> {
+  componentDidMount() {
+    clearLocalNotification()
+      .then(setLocalNotification);
+  }
+
   restartQuizAndAdjustStack = () => {
     const { navigation } = this.props;
     const currentNavigationKey = navigation.state.key;

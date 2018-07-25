@@ -1,8 +1,12 @@
 import { AsyncStorage } from 'react-native';
 import { currentQuizSeedData, decksSeedData, CurrentQuiz, Deck } from './seed-data';
+import { Notifications, Permissions } from 'expo';
+
+import { createNotification } from './helpers';
 
 export const DECKS_STORAGE_KEY = 'GmFlashcards:decks';
 export const CURRENT_QUIZ_STORAGE_KEY = 'GmFlashcards:currentQuiz';
+export const NOTIFICATION_KEY = 'GmFlashcards:notifications'
 
 /**
  * Decks storage methods
@@ -84,4 +88,42 @@ export const setCurrentQuizData = (currentQuiz: CurrentQuiz) => {
   return AsyncStorage.setItem(CURRENT_QUIZ_STORAGE_KEY, JSON.stringify(currentQuizToBeSaved))
     .then(() => AsyncStorage.getItem(CURRENT_QUIZ_STORAGE_KEY)
       .then(JSON.parse));
+}
+
+/**
+ * Local notifications
+ */
+export function clearLocalNotification () {
+  return AsyncStorage.removeItem(NOTIFICATION_KEY)
+    .then(Notifications.cancelAllScheduledNotificationsAsync);
+}
+
+export function setLocalNotification () {
+  AsyncStorage.getItem(NOTIFICATION_KEY)
+    .then(JSON.parse)
+    .then((data) => {
+      if (data === null) {
+        Permissions.askAsync(Permissions.NOTIFICATIONS)
+          .then(({ status }) => {
+            if (status === 'granted') {
+              Notifications.cancelAllScheduledNotificationsAsync();
+
+              let tomorrow = new Date();
+              tomorrow.setDate(tomorrow.getDate() + 1);
+              tomorrow.setHours(14);
+              tomorrow.setMinutes(0);
+
+              Notifications.scheduleLocalNotificationAsync(
+                createNotification(),
+                {
+                  time: tomorrow,
+                  repeat: 'minute',
+                },
+              );
+
+              AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true));
+            }
+          })
+      }
+    })
 }

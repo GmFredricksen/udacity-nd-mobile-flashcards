@@ -4,10 +4,11 @@ import { Provider } from 'react-redux';
 
 import reducer from './reducers';
 import RootStack from './components/Navigation/RootStack';
-import { setSeedData } from './utils/api';
+import { setLocalNotification, setSeedData } from './utils/api';
 
 class App extends Component<App> {
   componentDidMount() {
+    setLocalNotification();
     setSeedData();
   }
 
