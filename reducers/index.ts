@@ -18,9 +18,11 @@ function decks(state = {}, action: DecksInterface): object {
     case SET_DECK:
       const { deck } = action;
 
-      return {
-        ...state,
-        [deck.key]: deck,
+      if (deck) {
+        return {
+          ...state,
+          [deck.key]: deck,
+        }
       }
     default:
       return state;
