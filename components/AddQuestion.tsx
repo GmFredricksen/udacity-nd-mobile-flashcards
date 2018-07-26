@@ -8,7 +8,6 @@ import {
   View,
   TouchableOpacity,
   Keyboard,
-  Picker,
 } from 'react-native';
 
 import { addCardToDeck } from '../utils/api';
@@ -19,14 +18,12 @@ interface AddQuestionProps {
 interface AddQuestionState {
   question: string,
   answer: string,
-  result: boolean,
 }
 
 class AddQuestion extends Component<AddQuestionProps, AddQuestionState> {
   state = {
     question: '',
     answer: '',
-    result: true,
   }
 
   handleSaveQuestion() {
@@ -64,18 +61,6 @@ class AddQuestion extends Component<AddQuestionProps, AddQuestionState> {
           placeholder="Answer"
           value={this.state.answer}
         />
-        <View style={styles.pickerContainer}>
-          <Text>Result</Text>
-          <Picker
-            style={styles.picker}
-            itemStyle={styles.pickerItem}
-            selectedValue={this.state.result}
-            onValueChange={(itemValue, itemIndex) => this.setState({ result: itemValue })}
-          >
-            <Picker.Item label="Correct" value={true} />
-            <Picker.Item label="Incorrect" value={false} />
-          </Picker>
-        </View>
         <TouchableOpacity onPress={() => this.handleSaveQuestion()}>
           <View style={styles.buttonOutlined}>
             <Text>Save Card</Text>
