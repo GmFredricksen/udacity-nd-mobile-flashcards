@@ -54,17 +54,15 @@ class Quiz extends Component<QuizProps, QuizState> {
     <Text>{this.state.activeSlide + 1} / {this.props.deck.questions.length}</Text>
   )
 
-  isAnswerOnCardCorrect = (doesUserThinkIsCorrect: boolean) => {
-    const { deck } = this.props;
+  isAnswerOnCardCorrect = (hasUserAnsweredCorrectly: boolean) => {
     let propToUpdate = '';
     let countToUpdate: number;
     
     this.setState((prevState) => {
-      const { activeSlide, currentQuiz } = prevState;
+      const { currentQuiz } = prevState;
       const { correctAnswers, wrongAnswers } = currentQuiz;
-      const isUserAnswerCorrect = deck.questions[activeSlide].result === doesUserThinkIsCorrect;
 
-      if (isUserAnswerCorrect) {
+      if (hasUserAnsweredCorrectly) {
         propToUpdate = 'correctAnswers';
         countToUpdate = correctAnswers + 1;
       } else {
