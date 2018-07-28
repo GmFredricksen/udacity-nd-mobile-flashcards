@@ -1,6 +1,7 @@
 {
   "extends": ["tslint:latest", "tslint-react"],
   "rules": {
-    "quotemark": [true, "single"]
+    "quotemark": [true, "single"],
+    "jsx-no-lambda": false
   }
 }
