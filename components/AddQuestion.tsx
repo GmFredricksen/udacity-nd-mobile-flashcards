@@ -1,46 +1,36 @@
 import React, { Component } from 'react';
-import { NavigationScreenProp } from 'react-navigation';
 import {
-  StyleSheet,
-  TextInput,
-  Text,
-  KeyboardAvoidingView,
-  View,
-  TouchableOpacity,
   Keyboard,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import { NavigationScreenProp } from 'react-navigation';
 
 import { addCardToDeck } from '../utils/api';
 
-interface AddQuestionProps {
-  navigation: NavigationScreenProp<{}>,
+interface IAddQuestionProps {
+  navigation: NavigationScreenProp<{}>;
 }
-interface AddQuestionState {
-  question: string,
-  answer: string,
+interface IAddQuestionState {
+  question: string;
+  answer: string;
 }
 
-class AddQuestion extends Component<AddQuestionProps, AddQuestionState> {
-  state = {
-    question: '',
+class AddQuestion extends Component<IAddQuestionProps, IAddQuestionState> {
+  public state = {
     answer: '',
-  }
+    question: '',
+  };
 
-  handleSaveQuestion() {
-    const { navigation } = this.props;
-    const { deckName } = navigation.state.params;
-
-    addCardToDeck(deckName, this.state)
-      .then(() => {
-        navigation.goBack();
-      });
-  }
-
-  render() {
+  public render() {
     const { navigation } = this.props;
 
     return (
-      <KeyboardAvoidingView style={styles.detailView} behavior="padding" enabled>
+      <KeyboardAvoidingView style={styles.detailView} behavior='padding' enabled>
         <TextInput
           style={styles.titleInputField}
           multiline={true}
@@ -48,7 +38,7 @@ class AddQuestion extends Component<AddQuestionProps, AddQuestionState> {
           editable={true}
           onBlur={Keyboard.dismiss}
           onChangeText={(question) => this.setState({ question })}
-          placeholder="Question"
+          placeholder='Question'
           value={this.state.question}
         />
         <TextInput
@@ -58,7 +48,7 @@ class AddQuestion extends Component<AddQuestionProps, AddQuestionState> {
           editable={true}
           onBlur={Keyboard.dismiss}
           onChangeText={(answer) => this.setState({ answer })}
-          placeholder="Answer"
+          placeholder='Answer'
           value={this.state.answer}
         />
         <TouchableOpacity onPress={() => this.handleSaveQuestion()}>
@@ -72,46 +62,56 @@ class AddQuestion extends Component<AddQuestionProps, AddQuestionState> {
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
-    )
+    );
   }
-};
+
+  private handleSaveQuestion() {
+    const { navigation } = this.props;
+    const { deckName } = navigation.state.params;
+
+    addCardToDeck(deckName, this.state)
+      .then(() => {
+        navigation.goBack();
+      });
+  }
+}
 
 const styles = StyleSheet.create({
+  answerInputField: {
+    borderWidth: 1,
+    height: '10%',
+    textAlign: 'center',
+    width: '90%',
+  },
+  buttonOutlined: {
+    alignItems: 'center',
+    borderWidth: 1,
+    height: 50,
+    justifyContent: 'center',
+    width: 200,
+  },
   detailView: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: 20
+    padding: 20,
   },
-  titleInputField: {
-    width: '90%',
-    height: '20%',
+  picker: {
     borderWidth: 1,
-    textAlign: 'center',
-  },
-  answerInputField: {
-    width: '90%',
-    height: '10%',
-    borderWidth: 1,
-    textAlign: 'center',
+    height: 44,
+    justifyContent: 'center',
   },
   pickerContainer: {
     width: '90%',
   },
-  picker: {
-    borderWidth: 1,
-    justifyContent: 'center',
-    height: 44,
-  },
   pickerItem: {
     height: 44,
   },
-  buttonOutlined: {
-    width: 200,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+  titleInputField: {
     borderWidth: 1,
+    height: '20%',
+    textAlign: 'center',
+    width: '90%',
   },
 });
 

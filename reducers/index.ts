@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
 import {
-  DecksInterface,
   CurrentQuizActionInterface,
+  DecksInterface,
   SET_CURRENT_QUIZ,
-  SET_DECKS,
   SET_DECK,
+  SET_DECKS,
 } from '../actions';
 
 function decks(state = {}, action: DecksInterface): object {
@@ -14,7 +14,7 @@ function decks(state = {}, action: DecksInterface): object {
       return {
         ...state,
         ...action.decks,
-      }
+      };
     case SET_DECK:
       const { deck } = action;
 
@@ -22,7 +22,7 @@ function decks(state = {}, action: DecksInterface): object {
         return {
           ...state,
           [deck.key]: deck,
-        }
+        };
       }
     default:
       return state;
@@ -37,7 +37,7 @@ function currentQuiz(state = {}, action: CurrentQuizActionInterface): object {
       return {
         ...state,
         ...quiz,
-      }
+      };
     default:
       return state;
   }

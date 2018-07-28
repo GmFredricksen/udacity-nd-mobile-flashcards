@@ -1,46 +1,45 @@
 import React, { Component } from 'react';
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Carousel from 'react-native-snap-carousel';
 import {
   NavigationActions,
-  NavigationScreenProp,
   NavigationParams,
+  NavigationScreenProp,
   StackActions,
 } from 'react-navigation';
-import Carousel from 'react-native-snap-carousel';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
-import Card from './Card';
-import { initCurrentQuizData, setCurrentQuizData } from '../utils/api';
 import { setCurrentQuiz } from '../actions';
-import { CurrentQuiz, Deck } from '../utils/seed-data';
+import { initCurrentQuizData, setCurrentQuizData } from '../utils/api';
+import { ICurrentQuiz, IDeck } from '../utils/seed-data';
+import Card from './Card';
 
-interface QuizProps {
-  currentQuiz: CurrentQuiz,
-  deck: Deck,
-  dispatch: Dispatch,
-  navigation: NavigationScreenProp<NavigationParams>,
+interface IQuizProps {
+  currentQuiz: ICurrentQuiz;
+  deck: IDeck;
+  dispatch: Dispatch;
+  navigation: NavigationScreenProp<NavigationParams>;
 }
-interface QuizState {
-  activeSlide: number,
-  currentQuiz: CurrentQuiz,
+interface IQuizState {
+  activeSlide: number;
+  currentQuiz: ICurrentQuiz;
 }
 
-class Quiz extends Component<QuizProps, QuizState> {
-  carouselInstance: Carousel;
-
-  state = {
+class Quiz extends Component<IQuizProps, IQuizState> {
+  public state = {
     activeSlide: 0,
     currentQuiz: {
+      correctAnswers: 0,
+      dateWhenPlayed: '',
       deckTitle: '',
       totalQuestions: 0,
-      correctAnswers: 0,
       wrongAnswers: 0,
-      dateWhenPlayed: '',
     },
-  }
+  };
+  private carouselInstance: Carousel;
 
-  componentDidMount() {
+  public componentDidMount() {
     const { deck, dispatch } = this.props;
 
     initCurrentQuizData(deck)
@@ -50,74 +49,7 @@ class Quiz extends Component<QuizProps, QuizState> {
       });
   }
 
-  cardCounterComponent = () => (
-    <Text>{this.state.activeSlide + 1} / {this.props.deck.questions.length}</Text>
-  )
-
-  isAnswerOnCardCorrect = (hasUserAnsweredCorrectly: boolean) => {
-    let propToUpdate = '';
-    let countToUpdate: number;
-    
-    this.setState((prevState) => {
-      const { currentQuiz } = prevState;
-      const { correctAnswers, wrongAnswers } = currentQuiz;
-
-      if (hasUserAnsweredCorrectly) {
-        propToUpdate = 'correctAnswers';
-        countToUpdate = correctAnswers + 1;
-      } else {
-        propToUpdate = 'wrongAnswers';
-        countToUpdate = wrongAnswers + 1;
-      }
-
-      return {
-        ...prevState,
-        currentQuiz: {
-          ...currentQuiz,
-          [propToUpdate]: countToUpdate,
-        }
-      }
-    }, () => {
-      this.goToNextStep();
-    });
-  }
-
-  goToNextStep = () => {
-    const { deck } = this.props;
-    const { activeSlide } = this.state;
-    const currentSelectedCard = activeSlide + 1;
-
-    (currentSelectedCard < deck.questions.length)
-      ? this.carouselInstance.snapToNext()
-      : this.updateCurrentQuiz();
-  }
-
-  updateCurrentQuiz = () => {
-    const { dispatch } = this.props;
-    const { currentQuiz } = this.state;
-
-    setCurrentQuizData(currentQuiz)
-      .then((currentQuiz) => {
-        dispatch(setCurrentQuiz(currentQuiz));
-        this.goToQuizResultAndAdjustStack();
-      });
-  }
-
-  goToQuizResultAndAdjustStack = () => {
-    const { navigation } = this.props;
-    const currentNavigationKey = navigation.state.key;
-    const { deckName } = navigation.state.params;
-
-    const replaceAction = StackActions.replace({
-      key: currentNavigationKey,
-      action: NavigationActions.navigate({ routeName: 'QuizResult' }),
-      routeName: 'QuizResult',
-      params: { deckName },
-    });
-    navigation.dispatch(replaceAction);
-  }
-
-  render() {
+  public render() {
     const { deck } = this.props;
     const { width } = Dimensions.get('window');
 
@@ -125,7 +57,7 @@ class Quiz extends Component<QuizProps, QuizState> {
       <View style={styles.quizView}>
         {this.cardCounterComponent()}
         <Carousel
-          ref={(c) => { this.carouselInstance = c; }}
+          ref={(c: Carousel) => { this.carouselInstance = c; }}
           data={deck.questions}
           renderItem={({ item }) => <Card data={item} />}
           onSnapToItem={(index) => this.setState({ activeSlide: index })}
@@ -144,40 +76,110 @@ class Quiz extends Component<QuizProps, QuizState> {
           </View>
         </TouchableOpacity>
       </View>
-    )
+    );
+  }
+
+  private cardCounterComponent = () => (
+    <Text>{this.state.activeSlide + 1} / {this.props.deck.questions.length}</Text>
+  )
+
+  private isAnswerOnCardCorrect = (hasUserAnsweredCorrectly: boolean) => {
+    let propToUpdate = '';
+    let countToUpdate: number;
+
+    this.setState((prevState) => {
+      const { currentQuiz } = prevState;
+      const { correctAnswers, wrongAnswers } = currentQuiz;
+
+      if (hasUserAnsweredCorrectly) {
+        propToUpdate = 'correctAnswers';
+        countToUpdate = correctAnswers + 1;
+      } else {
+        propToUpdate = 'wrongAnswers';
+        countToUpdate = wrongAnswers + 1;
+      }
+
+      return {
+        ...prevState,
+        currentQuiz: {
+          ...currentQuiz,
+          [propToUpdate]: countToUpdate,
+        },
+      };
+    }, () => {
+      this.goToNextStep();
+    });
+  }
+
+  private goToNextStep = () => {
+    const { deck } = this.props;
+    const { activeSlide } = this.state;
+    const currentSelectedCard = activeSlide + 1;
+
+    (currentSelectedCard < deck.questions.length)
+      ? this.carouselInstance.snapToNext()
+      : this.updateCurrentQuiz();
+  }
+
+  private updateCurrentQuiz = () => {
+    const { dispatch } = this.props;
+    const { currentQuiz } = this.state;
+
+    setCurrentQuizData(currentQuiz)
+      .then((quiz) => {
+        dispatch(setCurrentQuiz(quiz));
+        this.goToQuizResultAndAdjustStack();
+      });
+  }
+
+  private goToQuizResultAndAdjustStack = () => {
+    const { navigation } = this.props;
+    const currentNavigationKey = navigation.state.key;
+    const { deckName } = navigation.state.params;
+
+    const replaceAction = StackActions.replace({
+      action: NavigationActions.navigate({ routeName: 'QuizResult' }),
+      key: currentNavigationKey,
+      params: { deckName },
+      routeName: 'QuizResult',
+    });
+    navigation.dispatch(replaceAction);
   }
 }
 
 const styles = StyleSheet.create({
-  quizView: {
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: 20
-  },
   buttonCorrect: {
-    width: 200,
-    height: 50,
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'green',
+    height: 50,
+    justifyContent: 'center',
+    width: 200,
   },
   buttonIncorrect: {
-    width: 200,
-    height: 50,
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'red',
+    height: 50,
+    justifyContent: 'center',
+    width: 200,
+  },
+  quizView: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'space-around',
+    padding: 20,
   },
 });
 
-const mapStateToProps = ({ currentQuiz, decks }: { currentQuiz: CurrentQuiz, decks: Deck[] }, ownProps: QuizProps) => {
+const mapStateToProps = (
+  { currentQuiz, decks }: { currentQuiz: ICurrentQuiz, decks: IDeck[] },
+  ownProps: IQuizProps,
+) => {
   const { deckName } = ownProps.navigation.state.params;
 
   return {
     currentQuiz,
     deck: decks[deckName],
-  }
+  };
 };
 
 export default connect(

@@ -1,53 +1,45 @@
 import React, { Component } from 'react';
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux'
-import { NavigationScreenProp } from 'react-navigation';
 import {
-  StyleSheet,
-  TextInput,
-  Text,
-  KeyboardAvoidingView,
-  View,
-  TouchableOpacity,
   Keyboard,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import { NavigationScreenProp } from 'react-navigation';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
+import { setDecks } from '../actions';
 import { saveDeckTitle } from '../utils/api';
 import { obj2Arr } from '../utils/helpers';
-import { setDecks } from '../actions';
-import { Deck } from '../utils/seed-data';
+import { IDeck } from '../utils/seed-data';
 
-interface AddDeckProps {
-  navigation: NavigationScreenProp<{}>,
-  dispatch: Dispatch,
+interface IAddDeckProps {
+  navigation: NavigationScreenProp<{}>;
+  dispatch: Dispatch;
 }
-interface AddDeckState {
-  titleText: string,
+interface IAddDeckState {
+  titleText: string;
 }
 
-class AddDeck extends Component<AddDeckProps, AddDeckState> {
-  state = {
+class AddDeck extends Component<IAddDeckProps, IAddDeckState> {
+  public state = {
     titleText: '',
-  }
+  };
 
-  handleSaveDeck(navigation: NavigationScreenProp<{}>) {
-    const { dispatch } = this.props;
-
-    saveDeckTitle(this.state.titleText)
-      .then((decks) => dispatch(setDecks(decks)));
-    navigation.goBack();
-  }
-
-  render() {
+  public render() {
     const { navigation } = this.props;
 
     return (
-      <KeyboardAvoidingView style={styles.detailView} behavior="padding" enabled>
+      <KeyboardAvoidingView style={styles.detailView} behavior='padding' enabled={true}>
         <TextInput
           style={styles.titleInputField}
           onBlur={Keyboard.dismiss}
           onChangeText={(titleText) => this.setState({ titleText })}
-          placeholder="New Deck Title"
+          placeholder='New Deck Title'
           value={this.state.titleText}
         />
         <TouchableOpacity onPress={() => this.handleSaveDeck(navigation)}>
@@ -61,34 +53,44 @@ class AddDeck extends Component<AddDeckProps, AddDeckState> {
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
-    )
+    );
   }
-};
+
+  private handleSaveDeck(navigation: NavigationScreenProp<{}>) {
+    const { dispatch } = this.props;
+
+    saveDeckTitle(this.state.titleText)
+      .then((decks) => dispatch(setDecks(decks)));
+    navigation.goBack();
+  }
+}
 
 const styles = StyleSheet.create({
+  buttonOutlined: {
+    alignItems: 'center',
+    borderWidth: 1,
+    height: 50,
+    justifyContent: 'center',
+    width: 200,
+  },
   detailView: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: 20
+    padding: 20,
   },
   titleInputField: {
-    width: 200,
+    borderWidth: 1,
     height: 40,
-    borderWidth: 1,
     textAlign: 'center',
-  },
-  buttonOutlined: {
     width: 200,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
   },
 });
 
-const mapStateToProps = ({ decks }: { decks: Deck}) => ({
+const mapStateToProps = ({ decks }: { decks: IDeck }) => ({
   decks: obj2Arr(decks),
 });
 
-export default connect()(AddDeck);
+export default connect(
+  mapStateToProps,
+)(AddDeck);

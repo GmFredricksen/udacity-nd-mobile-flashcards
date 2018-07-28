@@ -1,36 +1,36 @@
 import { Action } from 'redux';
-import { CurrentQuiz, Deck } from '../utils/seed-data';
+import { ICurrentQuiz, IDeck } from '../utils/seed-data';
 
 export const SET_CURRENT_QUIZ = 'SET_CURRENT_QUIZ';
 export const SET_DECKS = 'SET_DECKS';
 export const SET_DECK = 'SET_DECK';
 
-export interface DecksInterface extends Action {
-  type: string,
-  decks?: Deck[],
-  deck?: Deck,
+export interface IDecksAction extends Action {
+  type: string;
+  decks?: IDeck[];
+  deck?: IDeck;
 }
-export interface CurrentQuizActionInterface extends Action {
-  type: string,
-  quiz: CurrentQuiz,
+export interface ICurrentQuizAction extends Action {
+  type: string;
+  quiz: ICurrentQuiz;
 }
 
-export function setDecks(decks: Deck[]): DecksInterface {
+export function setDecks(decks: IDeck[]): IDecksAction {
   return {
-    type: SET_DECKS,
     decks,
-  }
+    type: SET_DECKS,
+  };
 }
-export function setDeck(deck: Deck): DecksInterface {
+export function setDeck(deck: IDeck): IDecksAction {
   return {
-    type: SET_DECK,
     deck,
-  }
+    type: SET_DECK,
+  };
 }
 
-export function setCurrentQuiz(quiz: CurrentQuiz): CurrentQuizActionInterface {
+export function setCurrentQuiz(quiz: ICurrentQuiz): ICurrentQuizAction {
   return {
-    type: SET_CURRENT_QUIZ,
     quiz,
-  }
+    type: SET_CURRENT_QUIZ,
+  };
 }

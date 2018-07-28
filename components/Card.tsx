@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
-import { Animated, StyleSheet, Text, View, Button } from 'react-native';
+import {
+  Animated,
+  Button,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { IDeck } from '../utils/seed-data';
 
-import { Deck } from '../utils/seed-data';
-
-interface CardProps {
-  data: Deck,
+interface ICardProps {
+  data: IDeck['questions'][0];
 }
-interface CardState {
-  animatedValue: Animated.Value,
-  isCardFlipped: boolean,
+interface ICardState {
+  animatedValue: Animated.Value;
+  isCardFlipped: boolean;
 }
 
-class Card extends Component<CardProps, CardState> {
-  currentRotationValue: Number;
+class Card extends Component<ICardProps, ICardState> {
+  private currentRotationValue: number;
 
-  constructor(props: CardProps) {
+  constructor(props: ICardProps) {
     super(props);
 
     this.state = {
       animatedValue: new Animated.Value(0),
       isCardFlipped: false,
-    }
+    };
     this.state.animatedValue.addListener(({ value }) => {
       this.currentRotationValue = value;
 
@@ -30,94 +35,104 @@ class Card extends Component<CardProps, CardState> {
       ) {
         this.toggleFlippedState();
       }
-    })
+    });
 
     this.currentRotationValue = 0;
   }
 
-  toggleFlippedState = () => {
+  public render() {
+    const { isCardFlipped } = this.state;
+
+    return (
+      <Animated.View style={[this.traslateYAnimatedStyles(), styles.card]}>
+        {this.cardContentToBeRendered(isCardFlipped)}
+      </Animated.View>
+    );
+  }
+
+  private cardContentToBeRendered = (isCardFlipped: boolean) => {
+    const { data } = this.props;
+
+    if (isCardFlipped) {
+      return (
+        <View style={styles.backCard}>
+          <Text>{data.answer}</Text>
+          <Button
+            onPress={this.flipCard}
+            title='View Question'
+            color='white'
+          />
+        </View>
+      );
+    }
+
+    return (
+      <View>
+        <Text>{data.question}</Text>
+        <Button
+          onPress={this.flipCard}
+          title='View Answer'
+          color='white'
+        />
+      </View>
+    );
+  }
+
+  private toggleFlippedState = () => {
     const { isCardFlipped } = this.state;
 
     this.setState({ isCardFlipped: !isCardFlipped });
   }
 
-  flipCard = () => {
+  private flipCard = () => {
     const { animatedValue } = this.state;
 
     if (this.currentRotationValue >= 90) {
       Animated.spring(animatedValue, {
-        toValue: 0,
-        tension: 10,
         friction: 8,
+        tension: 10,
+        toValue: 0,
         useNativeDriver: true,
       }).start();
     } else {
       Animated.spring(animatedValue, {
-        toValue: 180,
-        tension: 10,
         friction: 8,
+        tension: 10,
+        toValue: 180,
         useNativeDriver: true,
       }).start();
     }
   }
 
-  traslateYAnimatedStyles = () => {
+  private traslateYAnimatedStyles = () => {
     const { animatedValue } = this.state;
     const interpolation = animatedValue.interpolate({
       inputRange: [0, 180],
       outputRange: ['360deg', '180deg'],
-    })
+    });
 
     return {
       transform: [
         { rotateY: interpolation },
         { perspective: 1000 },
-      ]
-    }
-  }
-
-  render() {
-    const { data } = this.props;
-    const { isCardFlipped } = this.state;
-
-    return (
-      <Animated.View style={[this.traslateYAnimatedStyles(), styles.card]}>
-        {isCardFlipped
-          ? <View style={styles.backCard}>
-              <Text>{data.answer}</Text>
-              <Button
-                onPress={this.flipCard}
-                title="View Question"
-                color="white"
-              />
-            </View>
-          : <View>
-              <Text>{data.question}</Text>
-              <Button
-                onPress={this.flipCard}
-                title="View Answer"
-                color="white"
-              />
-            </View>
-        }
-      </Animated.View>
-    )
+      ],
+    };
   }
 }
 
 const styles = StyleSheet.create({
-  card: {
-    flex: 0.5,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: 20,
-    borderWidth: 1,
-    backgroundColor: 'green',
-  },
   backCard: {
     transform: [
       { rotateY: '180deg' },
     ],
+  },
+  card: {
+    alignItems: 'center',
+    backgroundColor: 'green',
+    borderWidth: 1,
+    flex: 0.5,
+    justifyContent: 'space-around',
+    padding: 20,
   },
 });
 

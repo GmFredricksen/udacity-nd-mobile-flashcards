@@ -1,42 +1,33 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {
   NavigationActions,
-  NavigationScreenProp,
   NavigationParams,
+  NavigationScreenProp,
   StackActions,
 } from 'react-navigation';
+import { connect } from 'react-redux';
 
-import { CurrentQuiz } from '../utils/seed-data';
 import { clearLocalNotification, setLocalNotification } from '../utils/api';
+import { ICurrentQuiz } from '../utils/seed-data';
 
-interface QuizResultProps {
-  currentQuiz: CurrentQuiz,
-  navigation: NavigationScreenProp<NavigationParams>,
+interface IQuizResultProps {
+  currentQuiz: ICurrentQuiz;
+  navigation: NavigationScreenProp<NavigationParams>;
 }
 
-class QuizResult extends Component<QuizResultProps> {
-  componentDidMount() {
+class QuizResult extends Component<IQuizResultProps> {
+  public componentDidMount() {
     clearLocalNotification()
       .then(setLocalNotification);
   }
 
-  restartQuizAndAdjustStack = () => {
-    const { navigation } = this.props;
-    const currentNavigationKey = navigation.state.key;
-    const { deckName } = navigation.state.params;
-
-    const replaceAction = StackActions.replace({
-      key: currentNavigationKey,
-      action: NavigationActions.navigate({ routeName: 'QuizView' }),
-      routeName: 'QuizView',
-      params: { deckName },
-    });
-    navigation.dispatch(replaceAction);
-  }
-
-  render() {
+  public render() {
     const { currentQuiz, navigation } = this.props;
     const { deckName } = navigation.state.params;
     const { correctAnswers, totalQuestions } = currentQuiz;
@@ -52,29 +43,43 @@ class QuizResult extends Component<QuizResultProps> {
           </View>
         </TouchableOpacity>
       </View>
-    )
+    );
+  }
+
+  private restartQuizAndAdjustStack = () => {
+    const { navigation } = this.props;
+    const currentNavigationKey = navigation.state.key;
+    const { deckName } = navigation.state.params;
+
+    const replaceAction = StackActions.replace({
+      action: NavigationActions.navigate({ routeName: 'QuizView' }),
+      key: currentNavigationKey,
+      params: { deckName },
+      routeName: 'QuizView',
+    });
+    navigation.dispatch(replaceAction);
   }
 }
 
 const styles = StyleSheet.create({
+  buttonOutlined: {
+    alignItems: 'center',
+    borderWidth: 1,
+    height: 50,
+    justifyContent: 'center',
+    width: 200,
+  },
   quizResult: {
+    alignItems: 'center',
     flex: 0.5,
     justifyContent: 'space-around',
-    alignItems: 'center',
     padding: 20,
-  },
-  buttonOutlined: {
-    width: 200,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
   },
 });
 
-const mapStateToProps = ({ currentQuiz }: { currentQuiz: CurrentQuiz }) => ({
+const mapStateToProps = ({ currentQuiz }: { currentQuiz: ICurrentQuiz }) => ({
   currentQuiz,
-})
+});
 
 export default connect(
   mapStateToProps,

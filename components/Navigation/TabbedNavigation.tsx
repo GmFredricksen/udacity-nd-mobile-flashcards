@@ -1,17 +1,17 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { createBottomTabNavigator } from 'react-navigation';
-import { MaterialIcons } from '@expo/vector-icons';
 
 import DecksStackNavigation from './DecksStackNavigation';
 
 const TabbedNavigation = createBottomTabNavigator({
   Decks: {
-    screen: DecksStackNavigation,
     navigationOptions: {
+      tabBarIcon: <MaterialIcons name='list' size={30}/>,
       tabBarLabel: 'Decks',
       title: 'Home',
-      tabBarIcon: <MaterialIcons name='list' size={30}/>
     },
+    screen: DecksStackNavigation,
   },
 }, {
   navigationOptions: {
@@ -20,16 +20,16 @@ const TabbedNavigation = createBottomTabNavigator({
   tabBarOptions: {
     activeTintColor: '#fff',
     style: {
-      height: 55,
-      width: '100%',
       backgroundColor: '#549c5a',
+      height: 55,
       shadowColor: 'rgba(0, 0, 0, 0.24)',
       shadowOffset: {
-        width: 0,
         height: 3,
+        width: 0,
       },
-      shadowRadius: 6,
       shadowOpacity: 1,
+      shadowRadius: 6,
+      width: '100%',
     },
   },
 });

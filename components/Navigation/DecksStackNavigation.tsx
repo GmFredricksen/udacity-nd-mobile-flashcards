@@ -1,40 +1,42 @@
 import React from 'react';
 import { Button } from 'react-native';
-import { createStackNavigator, NavigationScreenProp, NavigationParams } from 'react-navigation';
+import { createStackNavigator, NavigationParams, NavigationScreenProp } from 'react-navigation';
 
-import DecksList from '../DecksList';
 import DeckDetails from '../DeckDetails';
+import DecksList from '../DecksList';
 import Quiz from '../Quiz';
 import QuizResult from '../QuizResult';
 
 const DecksStackNavigation = createStackNavigator({
   Home: {
-    screen: DecksList,
-    navigationOptions: ({ navigation }: {navigation: NavigationScreenProp<{}>}) => ({
+    navigationOptions: ({ navigation }: { navigation: NavigationScreenProp<{}> }) => ({
+      headerRight: (
+        <Button
+          onPress={() => navigation.navigate('AddDeckModal')}
+          title='Add Deck'
+        />
+      ),
       title: 'Your Decks',
-      headerRight: <Button
-        onPress={() => navigation.navigate('AddDeckModal')}
-        title='Add Deck'
-      />,
     }),
+    screen: DecksList,
   },
   Details: {
-    screen: DeckDetails,
-    navigationOptions: ({ navigation }: {navigation: NavigationScreenProp<NavigationParams>}) => ({
+    navigationOptions: ({ navigation }: { navigation: NavigationScreenProp<NavigationParams> }) => ({
       title: `${navigation.state.params.deckName}`,
     }),
+    screen: DeckDetails,
   },
   QuizView: {
-    screen: Quiz,
-    navigationOptions: ({ navigation }: {navigation: NavigationScreenProp<NavigationParams>}) => ({
+    navigationOptions: ({ navigation }: { navigation: NavigationScreenProp<NavigationParams> }) => ({
       title: `Quiz - ${navigation.state.params.deckName}`,
     }),
+    screen: Quiz,
   },
   QuizResult: {
-    screen: QuizResult,
-    navigationOptions: ({ navigation }: {navigation: NavigationScreenProp<NavigationParams>}) => ({
+    navigationOptions: ({ navigation }: { navigation: NavigationScreenProp<NavigationParams> }) => ({
       title: 'Result',
     }),
+    screen: QuizResult,
   },
 });
 
