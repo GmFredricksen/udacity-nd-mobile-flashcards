@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -17,6 +17,7 @@ import { Dispatch } from 'redux';
 
 import { setDeck } from '../actions';
 import { getDeck } from '../utils/api';
+import { commonStyles } from '../utils/common-styles';
 import { IDeck } from '../utils/seed-data';
 
 interface IDeckDetailsProps {
@@ -49,20 +50,24 @@ class DeckDetails extends Component<IDeckDetailsProps> {
       deck &&
 
       (
-        <View style={styles.detailView}>
-          <Text>You have {(deck && deck.questions) && deck.questions.length} Cards
-          for {deck.title}.
-        </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('AddQuestionModal', { deckName: deck.title })}>
-            <View style={styles.buttonItems}>
-              <Text>
-                <MaterialIcons name='add-to-photos' size={30} />
-                Add Card
+        <View style={commonStyles.mainView}>
+          <Text style={commonStyles.viewHeading}>{deck && deck.title}</Text>
+          <View style={styles.detailInfo}>
+            <MaterialCommunityIcons name='cards' size={70} />
+            <Text>
+              {(deck && deck.questions) && deck.questions.length}
             </Text>
-            </View>
-          </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity onPress={() => navigation.navigate('AddQuestionModal', { deckName: deck.title })}>
+              <View style={[commonStyles.buttonOutlined, styles.buttonItems]}>
+                <MaterialIcons name='add-to-photos' size={30} />
+                <Text style={{ marginLeft: 5 }}>Add Card</Text>
+              </View>
+            </TouchableOpacity>
 
-          {this.contentToRenderOnCardsCount(!!deck.questions.length)}
+            {this.contentToRenderOnCardsCount(!!deck.questions.length)}
+          </View>
         </View>
       )
     );
@@ -82,7 +87,7 @@ class DeckDetails extends Component<IDeckDetailsProps> {
     if (areThereCardsAvailable) {
       return (
         <TouchableOpacity onPress={() => navigation.navigate('QuizView', { deckName: deck.title })}>
-          <View style={styles.buttonOutlined}>
+          <View style={commonStyles.buttonOutlined}>
             <Text>Start Quiz</Text>
           </View>
         </TouchableOpacity>
@@ -101,25 +106,12 @@ class DeckDetails extends Component<IDeckDetailsProps> {
 
 const styles = StyleSheet.create({
   buttonItems: {
-    alignItems: 'center',
-    borderWidth: 1,
     flexDirection: 'row',
-    height: 50,
-    justifyContent: 'center',
-    width: 200,
   },
-  buttonOutlined: {
+  detailInfo: {
     alignItems: 'center',
-    borderWidth: 1,
-    height: 50,
+    flexDirection: 'column',
     justifyContent: 'center',
-    width: 200,
-  },
-  detailView: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'space-around',
-    padding: 20,
   },
 });
 

@@ -14,6 +14,7 @@ import { Dispatch } from 'redux';
 
 import { setDecks } from '../actions';
 import { saveDeckTitle } from '../utils/api';
+import { commonStyles } from '../utils/common-styles';
 import { isFormValid, obj2Arr } from '../utils/helpers';
 import { IDeck } from '../utils/seed-data';
 
@@ -35,27 +36,32 @@ class AddDeck extends Component<IAddDeckProps, IAddDeckState> {
     const { titleText } = this.state;
 
     return (
-      <KeyboardAvoidingView style={styles.detailView} behavior='padding' enabled={true}>
+      <KeyboardAvoidingView style={commonStyles.mainView} behavior='padding' enabled={true}>
+        <View>
+          <Text style={commonStyles.viewHeading}>New Deck</Text>
+        </View>
         <TextInput
-          style={styles.titleInputField}
+          style={[styles.titleInputField, commonStyles.inputField]}
           onBlur={Keyboard.dismiss}
           onChangeText={(titleValue) => this.setState({ titleText: titleValue })}
           placeholder='New Deck Title'
           value={titleText}
         />
-        <TouchableOpacity
-          disabled={!isFormValid([titleText])}
-          onPress={() => this.handleSaveDeck(navigation)}
-        >
-          <View style={styles.buttonOutlined}>
-            <Text>Save Deck</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <View style={styles.buttonOutlined}>
-            <Text>Cancel</Text>
-          </View>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity
+            disabled={!isFormValid([titleText])}
+            onPress={() => this.handleSaveDeck(navigation)}
+          >
+            <View style={commonStyles.buttonOutlined}>
+              <Text>Save Deck</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <View style={commonStyles.buttonOutlined}>
+              <Text>Cancel</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     );
   }
@@ -70,24 +76,8 @@ class AddDeck extends Component<IAddDeckProps, IAddDeckState> {
 }
 
 const styles = StyleSheet.create({
-  buttonOutlined: {
-    alignItems: 'center',
-    borderWidth: 1,
-    height: 50,
-    justifyContent: 'center',
-    width: 200,
-  },
-  detailView: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'space-around',
-    padding: 20,
-  },
   titleInputField: {
-    borderWidth: 1,
-    height: 40,
-    textAlign: 'center',
-    width: 200,
+    height: '10%',
   },
 });
 

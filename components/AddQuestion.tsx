@@ -11,6 +11,7 @@ import {
 import { NavigationScreenProp } from 'react-navigation';
 
 import { addCardToDeck } from '../utils/api';
+import { commonStyles } from '../utils/common-styles';
 import { isFormValid } from '../utils/helpers';
 
 interface IAddQuestionProps {
@@ -32,9 +33,12 @@ class AddQuestion extends Component<IAddQuestionProps, IAddQuestionState> {
     const { answer, question } = this.state;
 
     return (
-      <KeyboardAvoidingView style={styles.detailView} behavior='padding' enabled>
+      <KeyboardAvoidingView style={commonStyles.mainView} behavior='padding' enabled>
+        <View>
+          <Text style={commonStyles.viewHeading}>New Question</Text>
+        </View>
         <TextInput
-          style={styles.titleInputField}
+          style={[styles.titleInputField, commonStyles.inputField]}
           multiline={true}
           numberOfLines={3}
           editable={true}
@@ -44,7 +48,7 @@ class AddQuestion extends Component<IAddQuestionProps, IAddQuestionState> {
           value={question}
         />
         <TextInput
-          style={styles.answerInputField}
+          style={[styles.answerInputField, commonStyles.inputField]}
           multiline={true}
           numberOfLines={3}
           editable={true}
@@ -53,19 +57,21 @@ class AddQuestion extends Component<IAddQuestionProps, IAddQuestionState> {
           placeholder='Answer'
           value={answer}
         />
-        <TouchableOpacity
-          disabled={!isFormValid([answer, question])}
-          onPress={() => this.handleSaveQuestion()}
-        >
-          <View style={styles.buttonOutlined}>
-            <Text>Save Card</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <View style={styles.buttonOutlined}>
-            <Text>Cancel</Text>
-          </View>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity
+            disabled={!isFormValid([answer, question])}
+            onPress={() => this.handleSaveQuestion()}
+          >
+            <View style={commonStyles.buttonOutlined}>
+              <Text>Save Card</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <View style={commonStyles.buttonOutlined}>
+              <Text>Cancel</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     );
   }
@@ -83,40 +89,10 @@ class AddQuestion extends Component<IAddQuestionProps, IAddQuestionState> {
 
 const styles = StyleSheet.create({
   answerInputField: {
-    borderWidth: 1,
-    height: '10%',
-    textAlign: 'center',
-    width: '90%',
-  },
-  buttonOutlined: {
-    alignItems: 'center',
-    borderWidth: 1,
-    height: 50,
-    justifyContent: 'center',
-    width: 200,
-  },
-  detailView: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'space-around',
-    padding: 20,
-  },
-  picker: {
-    borderWidth: 1,
-    height: 44,
-    justifyContent: 'center',
-  },
-  pickerContainer: {
-    width: '90%',
-  },
-  pickerItem: {
-    height: 44,
+    height: '20%',
   },
   titleInputField: {
-    borderWidth: 1,
     height: '20%',
-    textAlign: 'center',
-    width: '90%',
   },
 });
 

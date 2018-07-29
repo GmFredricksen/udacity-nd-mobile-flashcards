@@ -12,6 +12,7 @@ import { Dispatch } from 'redux';
 
 import { setCurrentQuiz } from '../actions';
 import { initCurrentQuizData, setCurrentQuizData } from '../utils/api';
+import { commonStyles } from '../utils/common-styles';
 import { ICurrentQuiz, IDeck } from '../utils/seed-data';
 import Card from './Card';
 
@@ -54,7 +55,7 @@ class Quiz extends Component<IQuizProps, IQuizState> {
     const { width } = Dimensions.get('window');
 
     return (
-      <View style={styles.quizView}>
+      <View style={commonStyles.mainView}>
         {this.cardCounterComponent()}
         <Carousel
           ref={(c: Carousel) => { this.carouselInstance = c; }}
@@ -66,12 +67,12 @@ class Quiz extends Component<IQuizProps, IQuizState> {
           scrollEnabled={false}
         />
         <TouchableOpacity onPress={() => this.isAnswerOnCardCorrect(true)}>
-          <View style={styles.buttonCorrect}>
+          <View style={[styles.buttonCorrect, commonStyles.buttonBase]}>
             <Text style={{ color: 'white' }}>Correct</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.isAnswerOnCardCorrect(false)}>
-          <View style={styles.buttonIncorrect}>
+          <View style={[styles.buttonIncorrect, commonStyles.buttonBase]}>
             <Text style={{ color: 'white' }}>Incorrect</Text>
           </View>
         </TouchableOpacity>
@@ -149,24 +150,10 @@ class Quiz extends Component<IQuizProps, IQuizState> {
 
 const styles = StyleSheet.create({
   buttonCorrect: {
-    alignItems: 'center',
     backgroundColor: 'green',
-    height: 50,
-    justifyContent: 'center',
-    width: 200,
   },
   buttonIncorrect: {
-    alignItems: 'center',
     backgroundColor: 'red',
-    height: 50,
-    justifyContent: 'center',
-    width: 200,
-  },
-  quizView: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'space-around',
-    padding: 20,
   },
 });
 

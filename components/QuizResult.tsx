@@ -14,6 +14,7 @@ import {
 import { connect } from 'react-redux';
 
 import { clearLocalNotification, setLocalNotification } from '../utils/api';
+import { commonStyles } from '../utils/common-styles';
 import { ICurrentQuiz } from '../utils/seed-data';
 
 interface IQuizResultProps {
@@ -33,12 +34,17 @@ class QuizResult extends Component<IQuizResultProps> {
     const { correctAnswers, totalQuestions } = currentQuiz;
 
     return (
-      <View style={styles.quizResult}>
-        <Text>Results for {deckName} Quiz</Text>
-        <Text>You've successfully answered</Text>
-        <Text>{correctAnswers} out of {totalQuestions} questions</Text>
+      <View style={commonStyles.mainView}>
+        <View>
+          <Text style={commonStyles.viewHeading}>{deckName}</Text>
+        </View>
+        <View style={styles.resultFeedback}>
+          <Text>You've successfully answered</Text>
+          <Text>{correctAnswers} out of {totalQuestions}</Text>
+          <Text>questions</Text>
+        </View>
         <TouchableOpacity onPress={() => this.restartQuizAndAdjustStack()}>
-          <View style={styles.buttonOutlined}>
+          <View style={commonStyles.buttonOutlined}>
             <Text>Restart Quiz</Text>
           </View>
         </TouchableOpacity>
@@ -62,18 +68,9 @@ class QuizResult extends Component<IQuizResultProps> {
 }
 
 const styles = StyleSheet.create({
-  buttonOutlined: {
+  resultFeedback: {
     alignItems: 'center',
-    borderWidth: 1,
-    height: 50,
     justifyContent: 'center',
-    width: 200,
-  },
-  quizResult: {
-    alignItems: 'center',
-    flex: 0.5,
-    justifyContent: 'space-around',
-    padding: 20,
   },
 });
 

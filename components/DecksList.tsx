@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { Component } from 'react';
 import {
   FlatList,
@@ -53,11 +54,15 @@ class DecksList extends Component<IDecksListProps> {
         style={styles.listItem}
         key={item.key}
       >
-        <Text>{item.title}</Text>
-        <Text>
-          {item.questions.length}
-          {item.questions.length === 1 ? 'Card' : 'Cards'}
-        </Text>
+        <View>
+          <Text>{item.title}</Text>
+        </View>
+        <View style={styles.listItemIconRight}>
+          <Text>
+            {item.questions.length}
+          </Text>
+          <MaterialCommunityIcons name='cards' size={20} />
+        </View>
       </TouchableOpacity>
     )
   )
@@ -73,8 +78,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#c4efc7',
     flex: 1,
+    flexDirection: 'row',
     height: 80,
     justifyContent: 'center',
+  },
+  listItemIconRight: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginRight: 10,
+    position: 'absolute',
+    right: 10,
   },
   listItemSeparator: {
     backgroundColor: '#9cc19f',
