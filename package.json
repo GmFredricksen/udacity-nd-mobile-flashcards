@@ -1,6 +1,6 @@
 {
   "name": "gm-flashcards",
-  "version": "0.3.2",
+  "version": "1.0.0",
   "private": true,
   "devDependencies": {
     "@types/jest": "^22.2.3",
