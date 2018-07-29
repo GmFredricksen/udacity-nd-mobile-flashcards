@@ -58,7 +58,7 @@ class DeckDetails extends Component<IDeckDetailsProps> {
               {(deck && deck.questions) && deck.questions.length}
             </Text>
           </View>
-          <View>
+          <View style={styles.detailInfo}>
             <TouchableOpacity onPress={() => navigation.navigate('AddQuestionModal', { deckName: deck.title })}>
               <View style={[commonStyles.buttonOutlined, styles.buttonItems]}>
                 <MaterialIcons name='add-to-photos' size={30} />
