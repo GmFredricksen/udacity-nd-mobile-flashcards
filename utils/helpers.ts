@@ -26,3 +26,11 @@ export const createNotification = () => ({
   },
   title: 'A great Quiz is awaiting!',
 });
+
+export const isFormValid = ([...args]): boolean => {
+  return args
+    .map((textInput) => !!textInput.trim().length)
+    .reduce((accumulator: boolean, value: boolean) => {
+      return accumulator && value;
+    }, true);
+};
