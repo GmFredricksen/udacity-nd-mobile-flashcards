@@ -47,8 +47,9 @@ export const decksSeedData = {
     key: 'Rust',
     questions: [
       {
-        answer: 'The combination of a function and the lexical environment within which that function was declared.',
-        question: 'What is a closure?',
+        // tslint:disable-next-line
+        answer: 'A systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety.',
+        question: 'What is Rust?',
       },
     ],
     title: 'Rust',
