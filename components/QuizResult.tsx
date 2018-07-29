@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 
 import { clearLocalNotification, setLocalNotification } from '../utils/api';
 import { commonStyles } from '../utils/common-styles';
+import { percentage } from '../utils/helpers';
 import { ICurrentQuiz } from '../utils/seed-data';
 
 interface IQuizResultProps {
@@ -37,6 +38,9 @@ class QuizResult extends Component<IQuizResultProps> {
       <View style={commonStyles.mainView}>
         <View>
           <Text style={commonStyles.viewHeading}>{deckName}</Text>
+        </View>
+        <View>
+          <Text style={styles.resultPercentage}>{percentage(correctAnswers, totalQuestions)}</Text>
         </View>
         <View style={styles.resultFeedback}>
           <Text>You've successfully answered</Text>
@@ -71,6 +75,9 @@ const styles = StyleSheet.create({
   resultFeedback: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  resultPercentage: {
+    fontSize: 40,
   },
 });
 

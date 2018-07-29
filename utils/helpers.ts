@@ -34,3 +34,7 @@ export const isFormValid = ([...args]): boolean => {
       return accumulator && value;
     }, true);
 };
+
+export const percentage = (value: number, total: number): string => (
+  `${(value / total) * 100} %`
+);
