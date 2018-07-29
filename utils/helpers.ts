@@ -1,8 +1,8 @@
-interface StateObj {
-  [key: string]: Object,
+interface IStateObj {
+  [key: string]: object;
 }
 
-export const obj2Arr = (obj: StateObj): Array<[Object]> => {
+export const obj2Arr = (obj: IStateObj): Array<[object]> => {
   return Object
     .keys(obj)
     .reduce((accumulator: any, value: string) => {
@@ -11,18 +11,30 @@ export const obj2Arr = (obj: StateObj): Array<[Object]> => {
         obj[value],
       ];
     }, []);
-}
+};
 
 export const createNotification = () => ({
-  title: 'A great Quiz is awaiting!',
-  body: "☝️🤓 don't forget to train with flashcards today!",
+  android: {
+    priority: 'high',
+    sound: true,
+    sticky: false,
+    vibrate: true,
+  },
+  body: '☝️🤓 don\'t forget to train with flashcards today!',
   ios: {
     sound: true,
   },
-  android: {
-    sound: true,
-    priority: 'high',
-    sticky: false,
-    vibrate: true,
-  }
+  title: 'A great Quiz is awaiting!',
 });
+
+export const isFormValid = ([...args]): boolean => {
+  return args
+    .map((textInput) => !!textInput.trim().length)
+    .reduce((accumulator: boolean, value: boolean) => {
+      return accumulator && value;
+    }, true);
+};
+
+export const percentage = (value: number, total: number): string => (
+  `${(value / total) * 100} %`
+);

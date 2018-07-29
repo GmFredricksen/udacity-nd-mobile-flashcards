@@ -1,8 +1,8 @@
 import { createStackNavigator } from 'react-navigation';
 
-import TabbedNavigation from './TabbedNavigation';
 import AddDeck from '../AddDeck';
 import AddQuestion from '../AddQuestion';
+import TabbedNavigation from './TabbedNavigation';
 
 const RootStack = createStackNavigator(
   {
@@ -17,9 +17,9 @@ const RootStack = createStackNavigator(
     },
   },
   {
-    mode: 'modal',
     headerMode: 'none',
-  }
+    mode: 'modal',
+  },
 );
 
 export default RootStack;

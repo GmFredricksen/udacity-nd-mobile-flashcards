@@ -1,116 +1,126 @@
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import React, { Component } from 'react';
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
 import {
-  NavigationEventSubscription,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {
   NavigationEventPayload,
-  NavigationScreenProp,
+  NavigationEventSubscription,
   NavigationParams,
+  NavigationScreenProp,
 } from 'react-navigation';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
-import { getDeck } from '../utils/api';
-import { Deck } from '../utils/seed-data';
 import { setDeck } from '../actions';
+import { getDeck } from '../utils/api';
+import { commonStyles } from '../utils/common-styles';
+import { IDeck } from '../utils/seed-data';
 
-interface DeckDetailsProps {
-  deck: Deck,
-  dispatch: Dispatch,
-  navigation: NavigationScreenProp<NavigationParams>,
+interface IDeckDetailsProps {
+  deck: IDeck;
+  dispatch: Dispatch;
+  navigation: NavigationScreenProp<NavigationParams>;
 }
 
-class DeckDetails extends Component<DeckDetailsProps> {
-  willFocusListener: NavigationEventSubscription;
+class DeckDetails extends Component<IDeckDetailsProps> {
+  private willFocusListener: NavigationEventSubscription;
 
-  constructor(props: DeckDetailsProps) {
+  constructor(props: IDeckDetailsProps) {
     super(props);
 
     this.willFocusListener = props.navigation.addListener(
       'willFocus',
-      (payload) => this._componentWillFocus(payload),
+      (payload) => this.componentWillFocus(payload),
     );
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     this.willFocusListener.remove();
   }
 
-  _componentWillFocus = (_payload: NavigationEventPayload) => {
-    const { dispatch } = this.props;
-    const { deckName } = _payload.state.params;
-
-    getDeck(deckName)
-      .then((deck) => dispatch(setDeck(deck)));
-  }
-
-  render() {
+  public render() {
     const { deck, navigation } = this.props;
 
     return (
 
       deck &&
 
-      <View style={styles.detailView}>
-        <Text>You have {(deck && deck.questions) && deck.questions.length} questions
-          for {deck.title}.
-        </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('AddQuestionModal', { deckName: deck.title })}>
-          <View style={styles.buttonItems}>
+      (
+        <View style={commonStyles.mainView}>
+          <Text style={commonStyles.viewHeading}>{deck && deck.title}</Text>
+          <View style={styles.detailInfo}>
+            <MaterialCommunityIcons name='cards' size={70} />
             <Text>
-              <MaterialIcons name='add-to-photos' size={30} />
-              Add Card
+              {(deck && deck.questions) && deck.questions.length}
             </Text>
           </View>
-        </TouchableOpacity>
-
-        { deck.questions.length
-          ? <TouchableOpacity onPress={() => navigation.navigate('QuizView', { deckName: deck.title })}>
-              <View style={styles.buttonOutlined}>
-                <Text>Start Quiz</Text>
+          <View style={styles.detailInfo}>
+            <TouchableOpacity onPress={() => navigation.navigate('AddQuestionModal', { deckName: deck.title })}>
+              <View style={[commonStyles.buttonOutlined, styles.buttonItems]}>
+                <MaterialIcons name='add-to-photos' size={30} />
+                <Text style={{ marginLeft: 5 }}>Add Card</Text>
               </View>
             </TouchableOpacity>
-          : <View>
-              <Text>
-                🤔 Mmh... Add at least 1 Card to be able to start a Quiz.
-              </Text>
-            </View>
-        }
-      </View>
-    )
+
+            {this.contentToRenderOnCardsCount(!!deck.questions.length)}
+          </View>
+        </View>
+      )
+    );
   }
-};
+
+  private componentWillFocus = (payload: NavigationEventPayload) => {
+    const { dispatch } = this.props;
+    const { deckName } = payload.state.params;
+
+    getDeck(deckName)
+      .then((deck) => dispatch(setDeck(deck)));
+  }
+
+  private contentToRenderOnCardsCount = (areThereCardsAvailable: boolean) => {
+    const { deck, navigation } = this.props;
+
+    if (areThereCardsAvailable) {
+      return (
+        <TouchableOpacity onPress={() => navigation.navigate('QuizView', { deckName: deck.title })}>
+          <View style={commonStyles.buttonOutlined}>
+            <Text>Start Quiz</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <View>
+        <Text>
+          🤔 Mmh... Add at least 1 Card to be able to start a Quiz.
+        </Text>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  detailView: {
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: 20
-  },
-  buttonOutlined: {
-    width: 200,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-  },
   buttonItems: {
-    width: 200,
-    height: 50,
     flexDirection: 'row',
+  },
+  detailInfo: {
     alignItems: 'center',
+    flexDirection: 'column',
     justifyContent: 'center',
-    borderWidth: 1,
-  }
+  },
 });
 
-const mapStateToProps = ({ decks }: { decks: Deck[] }, ownProps: DeckDetailsProps) => {
+const mapStateToProps = ({ decks }: { decks: IDeck[] }, ownProps: IDeckDetailsProps) => {
   const { deckName } = ownProps.navigation.state.params;
 
   return {
     deck: decks[deckName],
-  }
+  };
 };
 
 export default connect(

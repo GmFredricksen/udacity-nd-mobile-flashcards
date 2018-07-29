@@ -1,80 +1,89 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {
   NavigationActions,
-  NavigationScreenProp,
   NavigationParams,
+  NavigationScreenProp,
   StackActions,
 } from 'react-navigation';
+import { connect } from 'react-redux';
 
-import { CurrentQuiz } from '../utils/seed-data';
 import { clearLocalNotification, setLocalNotification } from '../utils/api';
+import { commonStyles } from '../utils/common-styles';
+import { percentage } from '../utils/helpers';
+import { ICurrentQuiz } from '../utils/seed-data';
 
-interface QuizResultProps {
-  currentQuiz: CurrentQuiz,
-  navigation: NavigationScreenProp<NavigationParams>,
+interface IQuizResultProps {
+  currentQuiz: ICurrentQuiz;
+  navigation: NavigationScreenProp<NavigationParams>;
 }
 
-class QuizResult extends Component<QuizResultProps> {
-  componentDidMount() {
+class QuizResult extends Component<IQuizResultProps> {
+  public componentDidMount() {
     clearLocalNotification()
       .then(setLocalNotification);
   }
 
-  restartQuizAndAdjustStack = () => {
-    const { navigation } = this.props;
-    const currentNavigationKey = navigation.state.key;
-    const { deckName } = navigation.state.params;
-
-    const replaceAction = StackActions.replace({
-      key: currentNavigationKey,
-      action: NavigationActions.navigate({ routeName: 'QuizView' }),
-      routeName: 'QuizView',
-      params: { deckName },
-    });
-    navigation.dispatch(replaceAction);
-  }
-
-  render() {
+  public render() {
     const { currentQuiz, navigation } = this.props;
     const { deckName } = navigation.state.params;
     const { correctAnswers, totalQuestions } = currentQuiz;
 
     return (
-      <View style={styles.quizResult}>
-        <Text>Results for {deckName} Quiz</Text>
-        <Text>You've successfully answered</Text>
-        <Text>{correctAnswers} out of {totalQuestions} questions</Text>
+      <View style={commonStyles.mainView}>
+        <View>
+          <Text style={commonStyles.viewHeading}>{deckName}</Text>
+        </View>
+        <View>
+          <Text style={styles.resultPercentage}>{percentage(correctAnswers, totalQuestions)}</Text>
+        </View>
+        <View style={styles.resultFeedback}>
+          <Text>You've successfully answered</Text>
+          <Text>{correctAnswers} out of {totalQuestions}</Text>
+          <Text>questions</Text>
+        </View>
         <TouchableOpacity onPress={() => this.restartQuizAndAdjustStack()}>
-          <View style={styles.buttonOutlined}>
+          <View style={commonStyles.buttonOutlined}>
             <Text>Restart Quiz</Text>
           </View>
         </TouchableOpacity>
       </View>
-    )
+    );
+  }
+
+  private restartQuizAndAdjustStack = () => {
+    const { navigation } = this.props;
+    const currentNavigationKey = navigation.state.key;
+    const { deckName } = navigation.state.params;
+
+    const replaceAction = StackActions.replace({
+      action: NavigationActions.navigate({ routeName: 'QuizView' }),
+      key: currentNavigationKey,
+      params: { deckName },
+      routeName: 'QuizView',
+    });
+    navigation.dispatch(replaceAction);
   }
 }
 
 const styles = StyleSheet.create({
-  quizResult: {
-    flex: 0.5,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: 20,
-  },
-  buttonOutlined: {
-    width: 200,
-    height: 50,
+  resultFeedback: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+  },
+  resultPercentage: {
+    fontSize: 40,
   },
 });
 
-const mapStateToProps = ({ currentQuiz }: { currentQuiz: CurrentQuiz }) => ({
+const mapStateToProps = ({ currentQuiz }: { currentQuiz: ICurrentQuiz }) => ({
   currentQuiz,
-})
+});
 
 export default connect(
   mapStateToProps,
