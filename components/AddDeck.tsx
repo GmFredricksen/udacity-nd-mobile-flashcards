@@ -14,7 +14,7 @@ import { Dispatch } from 'redux';
 
 import { setDecks } from '../actions';
 import { saveDeckTitle } from '../utils/api';
-import { obj2Arr } from '../utils/helpers';
+import { isFormValid, obj2Arr } from '../utils/helpers';
 import { IDeck } from '../utils/seed-data';
 
 interface IAddDeckProps {
@@ -32,17 +32,21 @@ class AddDeck extends Component<IAddDeckProps, IAddDeckState> {
 
   public render() {
     const { navigation } = this.props;
+    const { titleText } = this.state;
 
     return (
       <KeyboardAvoidingView style={styles.detailView} behavior='padding' enabled={true}>
         <TextInput
           style={styles.titleInputField}
           onBlur={Keyboard.dismiss}
-          onChangeText={(titleText) => this.setState({ titleText })}
+          onChangeText={(titleValue) => this.setState({ titleText: titleValue })}
           placeholder='New Deck Title'
-          value={this.state.titleText}
+          value={titleText}
         />
-        <TouchableOpacity onPress={() => this.handleSaveDeck(navigation)}>
+        <TouchableOpacity
+          disabled={!isFormValid([titleText])}
+          onPress={() => this.handleSaveDeck(navigation)}
+        >
           <View style={styles.buttonOutlined}>
             <Text>Save Deck</Text>
           </View>
