@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Animated,
   Button,
+  Platform,
   StyleSheet,
   Text,
   View,
@@ -60,7 +61,7 @@ class Card extends Component<ICardProps, ICardState> {
           <Button
             onPress={this.flipCard}
             title='View Question'
-            color='white'
+            color={Platform.OS === 'ios' ? 'white' : 'transparent'}
           />
         </View>
       );
@@ -72,7 +73,7 @@ class Card extends Component<ICardProps, ICardState> {
         <Button
           onPress={this.flipCard}
           title='View Answer'
-          color='white'
+          color={Platform.OS === 'ios' ? 'white' : 'transparent'}
         />
       </View>
     );
