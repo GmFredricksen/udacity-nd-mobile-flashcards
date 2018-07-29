@@ -11,6 +11,7 @@ import {
 import { NavigationScreenProp } from 'react-navigation';
 
 import { addCardToDeck } from '../utils/api';
+import { isFormValid } from '../utils/helpers';
 
 interface IAddQuestionProps {
   navigation: NavigationScreenProp<{}>;
@@ -28,6 +29,7 @@ class AddQuestion extends Component<IAddQuestionProps, IAddQuestionState> {
 
   public render() {
     const { navigation } = this.props;
+    const { answer, question } = this.state;
 
     return (
       <KeyboardAvoidingView style={styles.detailView} behavior='padding' enabled>
@@ -37,9 +39,9 @@ class AddQuestion extends Component<IAddQuestionProps, IAddQuestionState> {
           numberOfLines={3}
           editable={true}
           onBlur={Keyboard.dismiss}
-          onChangeText={(question) => this.setState({ question })}
+          onChangeText={(questionValue) => this.setState({ question: questionValue })}
           placeholder='Question'
-          value={this.state.question}
+          value={question}
         />
         <TextInput
           style={styles.answerInputField}
@@ -47,11 +49,14 @@ class AddQuestion extends Component<IAddQuestionProps, IAddQuestionState> {
           numberOfLines={3}
           editable={true}
           onBlur={Keyboard.dismiss}
-          onChangeText={(answer) => this.setState({ answer })}
+          onChangeText={(answerValue) => this.setState({ answer: answerValue })}
           placeholder='Answer'
-          value={this.state.answer}
+          value={answer}
         />
-        <TouchableOpacity onPress={() => this.handleSaveQuestion()}>
+        <TouchableOpacity
+          disabled={!isFormValid([answer, question])}
+          onPress={() => this.handleSaveQuestion()}
+        >
           <View style={styles.buttonOutlined}>
             <Text>Save Card</Text>
           </View>
