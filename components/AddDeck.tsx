@@ -68,10 +68,13 @@ class AddDeck extends Component<IAddDeckProps, IAddDeckState> {
 
   private handleSaveDeck(navigation: NavigationScreenProp<{}>) {
     const { dispatch } = this.props;
+    const { titleText } = this.state;
 
-    saveDeckTitle(this.state.titleText)
-      .then((decks) => dispatch(setDecks(decks)));
-    navigation.goBack();
+    saveDeckTitle(titleText)
+      .then((decks) => {
+        dispatch(setDecks(decks));
+        navigation.navigate('DeckDetails', { deckName: titleText });
+      });
   }
 }
 
