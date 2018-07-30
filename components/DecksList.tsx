@@ -69,7 +69,7 @@ class DecksList extends Component<IDecksListProps> {
   private navigateToDeckDtls = (item: IDeck) => {
     const { navigation } = this.props;
 
-    navigation.navigate('Details', { deckName: item.title });
+    navigation.navigate('DeckDetails', { deckName: item.title });
   }
 }
 

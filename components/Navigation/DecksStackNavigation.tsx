@@ -20,7 +20,7 @@ const DecksStackNavigation = createStackNavigator({
     }),
     screen: DecksList,
   },
-  Details: {
+  DeckDetails: {
     navigationOptions: ({ navigation }: { navigation: NavigationScreenProp<NavigationParams> }) => ({
       title: `${navigation.state.params.deckName}`,
     }),
