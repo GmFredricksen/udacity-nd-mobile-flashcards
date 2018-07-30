@@ -15,6 +15,15 @@ The most recent guide about performing common tasks can be found [here](https://
 
 * [react-native-snap-carousel](https://github.com/archriss/react-native-snap-carousel): used for handling rendering and scrolling of Cards in a Quiz
 
+## Target Platforms
+
+As of today the app has been tested and run successfully on the following platforms:
+
+* *`iOS`* - Device/Simulator
+* *`Android`* - Device
+
+Should you encounter any error/bug please make sure to submit an issue to this repository.
+
 ## TODOs
 
 * Write tests
